@@ -22,7 +22,9 @@
 
     --full-margin-content: 40px;
     --half-margin-content: 24px;
-    --small-margin-content: 12px
+    --small-margin-content: 12px;
+
+    --border-radius: 14px;
 }
 
 body {
