@@ -209,9 +209,10 @@ main .new_widget_modal {
     position: fixed;
     left: 264px;
     top: 80px;
-    width: 100%;
+    scale: 0;
     max-width: 324px;
-    padding: 24px 8px;
+    overflow: hidden;
+    transition: .3s ease-in-out;
     border-radius: var(--border-radius);
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
     background-color: var(--sidebar-active-state-bg);
@@ -330,4 +331,18 @@ main .new_widget_modal {
 .new_widget_modal button:hover {
     color: var(--primary-text-hover);
     background-color: var(--active-state-btn-bg);
+}
+
+main .modal_open {
+    scale: 100%;
+    padding: 24px 8px;
+}
+
+main .modal_openned {
+    background-color: var(--active-state-btn-bg);
+    color: var(--primary-text-hover);
+}
+
+main .modal_openned .new_widget {
+    color: var(--primary-text-hover);
 }

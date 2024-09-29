@@ -5,7 +5,26 @@ const newWidget_btn = document.getElementById('new_widget_btn')
 const addClock_btn = document.getElementById('add_clock_btn')
 const settings_btn = document.getElementById('settings_btn')
 
+const newWidget_modal = document.getElementById('new_widget_modal')
+
 openSidebar_btn.addEventListener('click', openSidebar)
+newWidget_btn.addEventListener('click', () => { 
+    if(!newWidget_modal.classList.contains('modal_open')){
+        openModal(newWidget_modal)
+        addClass(newWidget_btn, 'modal_openned')
+    } else {
+        closeModal(newWidget_modal)
+        removeClass(newWidget_btn, 'modal_openned')
+    }
+})
+
+function openModal(modal) {
+    addClass(modal, 'modal_open')
+}
+
+function closeModal(modal) {
+    removeClass(modal, 'modal_open')
+}
 
 function openSidebar() {
     
@@ -18,9 +37,6 @@ function openSidebar() {
         addClass(addClock_btn, 'active')
         addClass(settings_btn, 'active')
         removeClass(sidebarNav, 'close')
-
-        // newWidget_btn.style.backgroundColor = 'var(--light-btn-bg)'
-        // newWidget_btn.style.color = 'var(--secondary-text-color)'
     } else {
         removeClass(sidebarNav, 'open')
         removeClass(sidebarLogo, 'active')
@@ -31,8 +47,8 @@ function openSidebar() {
         removeClass(addClock_btn, 'active')
         addClass(sidebarNav, 'close')
 
-        // newWidget_btn.style.backgroundColor = 'transparent'
-        // newWidget_btn.style.color = 'var(--primary-text-color)'
+        closeModal(newWidget_modal)
+        removeClass(newWidget_btn, 'modal_openned')
     }
 }
 
