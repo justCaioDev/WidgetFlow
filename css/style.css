@@ -63,7 +63,7 @@ main .widgethub_grid_container {
     margin-left: 80px;
     padding: 14px;
     border-radius: var(--border-radius);
-    background-color: #d9d9d935;
+    /* background-color: #d9d9d935; */
 }
 
 main .widget_dropzone {
@@ -98,10 +98,18 @@ main .sidebar_top {
     gap: var(--full-margin-content);
 }
 
-main .sidebar_logo {
-    width: 28px;
-    height: 28px;
+main #sidebar_logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    transition: .3s;
+}
+
+main #sidebar_logo:hover {
     cursor: pointer;
+    color: var(--primary-text-hover);
 }
 
 
@@ -121,14 +129,19 @@ main .new_widget_btn {
     background-color: transparent;
     transition: .3s;
     border: none;
+    color: var(--primary-text-color);
 }
 
 main .new_widget_btn:hover {
     background-color: var(--transparent-active-state-btn);
+    color: var(--primary-text-hover);
     cursor: pointer;
 }
 
-main .new_widget_btn img {
+main .new_widget_btn i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 24px;
     height: 24px;
 }
@@ -141,15 +154,20 @@ main .add_clock_btn {
     border-radius: 8px;
     background-color: transparent;
     transition: .3s;
+    color: var(--primary-text-color);
     border: none;
 }
 
 main .add_clock_btn:hover {
     background-color: var(--transparent-active-state-btn);
+    color: var(--primary-text-hover);
     cursor: pointer;
 }
 
-main .add_clock_btn img {
+main .add_clock_btn i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 24px;
     height: 24px;
 }
@@ -162,17 +180,22 @@ main .settings_btn {
     border-radius: 8px;
     background-color: transparent;
     transition: .3s;
+    color: var(--primary-text-color);
     border: none;
 }
 
 main .settings_btn:hover {
     background-color: var(--transparent-active-state-btn);
+    color: var(--primary-text-hover);
     cursor: pointer;
 }
 
-main .settings_btn img {
-    width: 26px;
-    height: 26px;
+main .settings_btn i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
 }
 
 
