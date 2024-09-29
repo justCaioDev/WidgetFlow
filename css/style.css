@@ -9,7 +9,7 @@
     --light-main-bg: #BFBDBA;
 
     --sidebar-bg: #0D0D0D;
-    --sidebar-active-state-bg: rgba(13, 13, 13, 0.6);
+    --sidebar-active-state-bg: rgba(13, 13, 13, 0.8);
 
     --light-btn-bg: #D9D9D9;
     --active-state-btn-bg: #0D0D0D;
@@ -17,7 +17,7 @@
 
     --primary-text-color: #D9D9D9;
     --primary-text-hover: #ffffff;
-    --secondary-text-hover: #0D0D0D;
+    --secondary-text-color: #0D0D0D;
     --secondary-text-hover: #ffffff;
 
     --full-margin-content: 40px;
@@ -35,14 +35,22 @@ body {
     color: var(--primary-text-color);
 }
 
-p {
-    font-size: 1.125rem;
+p, button {
+    font-size: 0.875rem;
     font-weight: 400;
+    color: var(--primary-text-color);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
+    color: var(--primary-text-hover);
+}
+
+i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 main {
@@ -74,7 +82,7 @@ main .widget_dropzone {
 main .sidebar_nav {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
     justify-content: space-between;
     
     position: fixed;
@@ -86,25 +94,37 @@ main .sidebar_nav {
     
     padding: 24px 8px;
     border-radius: 0 8px 8px 0;
+    transition: .4s;
+    overflow: hidden;
     z-index: 99;
     background-color: var(--sidebar-bg);
     box-shadow: 4px 0 8px rgba(0, 0, 0, 0.25);
 }
 
-main .sidebar_top {
+main .open {
+    width: 252px;
+    background-color: var(--sidebar-active-state-bg);
+}
+
+main .sidebar_top, .sidebar_bottom {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
     gap: var(--half-margin-content);
 }
 
-main #sidebar_logo {
+main .sidebar_logo_box {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    transition: .3s;
+    gap: 8px;
+    padding-left: 8px;
+}
+
+main #sidebar_logo {
+    width: auto !important;
 }
 
 main #sidebar_logo:hover {
@@ -112,7 +132,20 @@ main #sidebar_logo:hover {
     color: var(--primary-text-hover);
 }
 
+main .sidebar_logo {
+    width: 0;
+    overflow: hidden;
+}
 
+main .active {
+    justify-content: left;
+    width: 100%;
+    gap: 8px;
+}
+
+main .sidebar_logo_box .active {
+    color: var(--primary-text-hover);
+}
 
 main .sidebar_line {
     width: 100%;
@@ -120,82 +153,54 @@ main .sidebar_line {
     background-color: #BFBDBA;
 }
 
-main .new_widget_btn {
+main .new_widget_btn, .add_clock_btn, .settings_btn {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 8px;
     border-radius: 8px;
     background-color: transparent;
-    transition: .3s;
+    transition: .4s;
+    width: 100%;
+    height: 40px;
     border: none;
     color: var(--primary-text-color);
 }
 
-main .new_widget_btn:hover {
+main .new_widget_btn:hover, main .add_clock_btn:hover, main .settings_btn:hover {
     background-color: var(--transparent-active-state-btn);
     color: var(--primary-text-hover);
     cursor: pointer;
 }
 
-main .new_widget_btn i {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-}
-
-main .add_clock_btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: transparent;
-    transition: .3s;
-    color: var(--primary-text-color);
-    border: none;
-}
-
-main .add_clock_btn:hover {
-    background-color: var(--transparent-active-state-btn);
+main .add_clock_btn:hover .add_clock, main .settings_btn:hover .settings {
     color: var(--primary-text-hover);
-    cursor: pointer;
 }
 
-main .add_clock_btn i {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
+main .new_widget, main .add_clock, main .settings {
+    width: 0;
+    overflow: hidden;
+    transition: .4s;
 }
 
-main .settings_btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: transparent;
-    transition: .3s;
-    color: var(--primary-text-color);
-    border: none;
+main .active .new_widget, main .active .add_clock, main .active .settings {
+    width: auto;
 }
 
-main .settings_btn:hover {
-    background-color: var(--transparent-active-state-btn);
+main .openned {
+    background-color: var(--light-btn-bg);
+    color: var(--secondary-text-color);
+}
+
+main .openned .new_widget {
+    color: var(--secondary-text-color);
+}
+
+main .openned:hover {
+    background-color: var(--active-state-btn-bg);
     color: var(--primary-text-hover);
-    cursor: pointer;
 }
 
-main .settings_btn i {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
+main .openned:hover .new_widget {
+    color: var(--primary-text-hover);
 }
-
-
