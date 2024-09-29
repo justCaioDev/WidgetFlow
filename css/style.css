@@ -204,3 +204,130 @@ main .openned:hover {
 main .openned:hover .new_widget {
     color: var(--primary-text-hover);
 }
+
+main .new_widget_modal {  
+    position: fixed;
+    left: 264px;
+    top: 80px;
+    width: 100%;
+    max-width: 324px;
+    padding: 24px 8px;
+    border-radius: var(--border-radius);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    background-color: var(--sidebar-active-state-bg);
+}
+
+.new_widget_modal .link, .color, .image, .size, .title {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    padding: 6px 12px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    background-color: var(--active-state-btn-bg);
+}
+
+.new_widget_modal input{
+    font-family: 'Alexandria';
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 24px;
+    padding: 4px;
+    border-radius: 4px;
+    border: none;
+    background-color: var(--active-state-btn-bg);
+    color: var(--primary-text-color);
+}
+
+.new_widget_modal input:focus {
+    outline: none;
+    background-color: var(--transparent-active-state-btn);
+}
+
+.new_widget_modal .color, .size {
+    align-items: start;
+    flex-direction: column;
+    padding-block: 12px;
+    gap: 8px;
+}
+
+.new_widget_modal .color {
+    margin-bottom: 4px;
+}
+
+.new_widget_modal .image {
+    margin-top: 4px;
+}
+
+.new_widget_modal .colors_option {
+    display: grid;
+    grid-template-columns: repeat(7, auto);
+    gap: 8px;
+}
+
+.new_widget_modal .color_pick {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #BFBDBA;
+}
+
+.new_widget_modal .color_pick:hover {
+    outline: 2px solid #ffffff;
+}
+
+.new_widget_modal .sizes_option {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.new_widget_modal .size_pick {
+    border-radius: 4px;
+    padding: 4px;
+    transition: .3s;
+}
+
+.new_widget_modal .size_pick:hover {
+    color: var(--primary-text-hover);
+    background-color: var(--transparent-active-state-btn);
+    cursor: pointer;
+}
+
+.new_widget_modal .title {
+    margin-bottom: 4px;
+}
+
+.new_widget_modal .or {
+    padding-left: 8px;
+}
+
+.new_widget_modal .optional {
+    text-align: end;
+    padding-right: 8px;
+    margin-bottom: 12px;
+}
+
+.new_widget_modal button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: .3s;
+    background-color: var(--light-btn-bg);
+    color: var(--secondary-text-color);
+}
+
+.new_widget_modal button:hover {
+    color: var(--primary-text-hover);
+    background-color: var(--active-state-btn-bg);
+}
