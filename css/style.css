@@ -95,7 +95,7 @@ main .sidebar_top {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--full-margin-content);
+    gap: var(--half-margin-content);
 }
 
 main #sidebar_logo {
