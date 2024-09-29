@@ -48,7 +48,7 @@ h1, h2, h3, h4, h5, h6 {
 main {
     width: 100%;
     height: 100%;
-    padding-top: 80px;
+    padding-top: 6px;
 }
 
 main .widgethub_grid_container {
@@ -57,7 +57,7 @@ main .widgethub_grid_container {
     height: 720px;
     margin: auto;
     border-radius: var(--border-radius);
-    background-color: #D9D9D9;
+    background-color: #d9d9d935;
 }
 
 main .sidebar_nav {
@@ -73,10 +73,11 @@ main .sidebar_nav {
     width: 64px;
     height: 100%;
     
-    padding: 40px 10px;
-    border-radius: 0 14px 14px 0;
+    padding: 24px 8px;
+    border-radius: 0 8px 8px 0;
     z-index: 99;
     background-color: var(--sidebar-bg);
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.25);
 }
 
 main .sidebar_top {
@@ -87,6 +88,80 @@ main .sidebar_top {
 }
 
 main .sidebar_logo {
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
 }
+
+
+
+main .sidebar_line {
+    width: 100%;
+    height: 1px;
+    background-color: #BFBDBA;
+}
+
+main .new_widget_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: transparent;
+    transition: .3s;
+    border: none;
+}
+
+main .new_widget_btn:hover {
+    background-color: var(--transparent-active-state-btn);
+    cursor: pointer;
+}
+
+main .new_widget_btn img {
+    width: 24px;
+    height: 24px;
+}
+
+main .add_clock_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: transparent;
+    transition: .3s;
+    border: none;
+}
+
+main .add_clock_btn:hover {
+    background-color: var(--transparent-active-state-btn);
+    cursor: pointer;
+}
+
+main .add_clock_btn img {
+    width: 24px;
+    height: 24px;
+}
+
+main .settings_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: transparent;
+    transition: .3s;
+    border: none;
+}
+
+main .settings_btn:hover {
+    background-color: var(--transparent-active-state-btn);
+    cursor: pointer;
+}
+
+main .settings_btn img {
+    width: 26px;
+    height: 26px;
+}
+
+
