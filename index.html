@@ -14,7 +14,7 @@
     <script src="js/main.js" defer></script>
 </head>
 <body>
-    <main id="main_container" data-bgimage="">
+    <main id="main_container" data-image="">
         <section id="widgethub_grid_container" class="widgethub_grid_container">
             <div class="widget_dropzone dropzone_size"></div>
             <div class="widget_dropzone"></div>
@@ -241,39 +241,39 @@
                     <p class="settings">Settings</p>
                 </button>
                 <aside id="settings_modal" class="settings_modal">
-                    <button>
+                    <button id="save_settings_btn">
                         <i class="fa-regular fa-floppy-disk fa-xl"></i>
                         Save Settings
                     </button>
                     <div class="background_color">
                         <p>Background color:</p>
                         <div class="colors">
-                            <div class="color"></div>
-                            <div class="color"></div>
+                            <div data-color="#BFBDBA" class="settings_color"></div>
+                            <div data-color="#262626" class="settings_color settigs_color_selected"></div>
                         </div>
                     </div>
                     <p>Or</p>
                     <div class="image">
                         <p>Image:</p>
-                        <input type="file" accept="image/webp">
+                        <input id="settings_image" type="file" accept="image/png image/jpg">
                     </div>
                     <div class="widget_type">
                         <p>Widget type:</p>
                         <div class="types">
                             <div class="type">
-                                <div class="type_box">
+                                <div data-type="square" class="type_box">
                                     <div class="square"></div>
                                 </div>
                                 <p>Square</p>
                             </div>
                             <div class="type">
-                                <div class="type_box">
+                                <div data-type="small" class="type_box type_selected">
                                     <div class="small_rounded"></div>
                                 </div>
                                 <p>Small Rounded</p>
                             </div>
                             <div class="type">
-                                <div class="type_box">
+                                <div data-type="medium" class="type_box">
                                     <div class="medium_rounded"></div>
                                 </div>
                                 <p>Medium Rounded</p>

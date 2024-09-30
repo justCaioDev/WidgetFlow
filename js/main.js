@@ -6,6 +6,7 @@ const addClock_btn = document.getElementById('add_clock_btn')
 const settings_btn = document.getElementById('settings_btn')
 const createWidget_btn = document.getElementById('create_widget_btn')
 const closeSidebarIcon = document.getElementById('close_sidebar')
+const saveSettings_btn = document.getElementById('save_settings_btn')
 
 const newWidget_modal = document.getElementById('new_widget_modal')
 const addClock_modal = document.getElementById('add_clock_modal')
@@ -21,7 +22,10 @@ const handleColors = document.querySelectorAll('.color_pick')
 const handleLink = document.getElementById('link')
 const handleImage = document.getElementById('image')
 const handleSizes = document.querySelectorAll('.size_pick')
+const handleTypes = document.querySelectorAll('.type_box')
+const handleSettingsColors = document.querySelectorAll('.settings_color')
 const handleTitle = document.getElementById('title')  
+const handleSettingsImage = document.getElementById('settings_image')
 
 
 
@@ -122,6 +126,46 @@ settings_btn.addEventListener('click', () => {
 })
 
 closeSidebarIcon.addEventListener('click', closeSidebar)
+
+saveSettings_btn.addEventListener('click', saveSettings)
+
+function saveSettings() {
+    const colorSelected = document.querySelector('div.settigs_color_selected')
+    const typeSelected = document.querySelector('div.type_selected')
+    const widgets = document.querySelectorAll('.widget')
+
+    widgets.forEach(widget => {
+        if(typeSelected.dataset.type == 'square') {
+            widget.style.borderRadius = 'var(--none-border-radius)'
+        }
+        if(typeSelected.dataset.type == 'small') {
+            widget.style.borderRadius = 'var(--medium-border-radius)'
+        }
+        if(typeSelected.dataset.type == 'medium') {
+            widget.style.borderRadius = 'var(--large-border-radius)'
+        }
+    })
+    const image = handleSettingsImage.dataset.image
+    bgImage.style.backgroundImage = image
+    bgImage.style.backgroundColor = colorSelected.dataset.color
+    
+}
+
+handleSettingsImage.addEventListener('change', function (e) {
+    const inputTarget = e.target
+    const file = inputTarget.files[0]
+
+    const reader = new FileReader()
+    
+    reader.addEventListener('load', function(e) {
+        const readerTarget = e.target
+        saveSettings()
+        handleSettingsImage.dataset.image = `url(${readerTarget.result})` 
+        
+    })
+    
+    reader.readAsDataURL(file)
+})
 
 function createWidget() {
     const colorSelected = document.querySelector('div.color_selected')
@@ -258,6 +302,29 @@ function selectSize() {
         removeClass(handleSize, 'size_selected')
     })
     addClass(this, 'size_selected')
+}
+
+handleTypes.forEach(handleType => {
+    handleType.addEventListener('click', selectType)
+})
+
+function selectType() {
+    handleTypes.forEach(handleType => {
+        removeClass(handleType, 'type_selected')
+    })
+    addClass(this, 'type_selected')
+}
+
+handleSettingsColors.forEach(handleSettingsColor => {
+    handleSettingsColor.addEventListener('click', selectSettingsColor)
+    handleSettingsColor.style.backgroundColor = handleSettingsColor.dataset.color
+})
+
+function selectSettingsColor() {
+    handleSettingsColors.forEach(handleSettingsColor => {
+        removeClass(handleSettingsColor, 'settigs_color_selected')
+    })
+    addClass(this, 'settigs_color_selected')
 }
 
 
