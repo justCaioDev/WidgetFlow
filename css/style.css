@@ -575,10 +575,16 @@ main .widget {
     text-align: center;
     border-radius: var(--medium-border-radius);
     z-index: 99;
+    transition: .3s;
     color: var(--primary-text-color);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+}
+
+main .widget:hover {
+    scale: 105%;
+    color: var(--primary-text-hover);
 }
 
 .widget a {
