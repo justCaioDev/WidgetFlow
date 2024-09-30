@@ -25,6 +25,10 @@
     --small-margin-content: 12px;
 
     --border-radius: 8px;
+
+    --none-border-radius: 0px;
+    --medium-border-radius: 8px;
+    --large-border-radius: 14px;
 }
 
 body {
@@ -64,18 +68,20 @@ main .widgethub_grid_container {
     grid-template-columns: repeat(15, 1fr);
     grid-template-rows: repeat(9, 1fr);
     column-gap: 14px;
-    row-gap: 18px;
+    row-gap: 28px;
     width: 100%;
     max-width: 1320px;
     height: 720px;
     margin-left: 80px;
     padding: 14px;
+    transition: .4s;
     border-radius: var(--border-radius);
 }
 
 main .widget_dropzone {
-    background-color: aquamarine;
+    position: relative;
     border-radius: 4px;
+    transition: .4s;
 }
 
 main .sidebar_nav {
@@ -99,6 +105,13 @@ main .sidebar_nav {
     z-index: 99;
     background-color: var(--sidebar-bg);
     box-shadow: 4px 0 8px rgba(0, 0, 0, 0.25);
+}
+
+main .create_zone {
+    position: relative;
+    width: 90%;
+    min-height: 40px;
+    border-radius: 8px;
 }
 
 main .close_icon {
@@ -290,7 +303,7 @@ main .new_widget_modal {
     height: 32px;
     border-radius: 50%;
     cursor: pointer;
-    background-color: #BFBDBA;
+    border: 2px solid white;
 }
 
 .new_widget_modal .color_pick:hover {
@@ -549,3 +562,56 @@ main .selected {
     background-color: var(--transparent-active-state-btn);
     color: var(--primary-text-hover);
 }
+
+main .widget {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    border-radius: var(--medium-border-radius);
+    z-index: 99;
+    color: var(--primary-text-color);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.widget a {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+main .dragging {
+    opacity: .5;
+}
+
+main .color_selected {
+    scale: 120% !important;
+}
+
+main .size_selected {
+    color: var(--primary-text-hover);
+    background-color: var(--transparent-active-state-btn);
+}
+
+main .container_active {
+    background-color: var(--transparent-active-state-btn);
+}
+
+main .dropzone_active {
+    background-color: var(--transparent-active-state-btn);
+}
+
+main .dropzone_over {
+    background-color: rgba(250, 235, 215, 0.5);
+}
+
+main .has_title::after {
+    content: attr(data-title);
+}
+
