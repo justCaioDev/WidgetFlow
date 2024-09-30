@@ -4,6 +4,7 @@ const sidebarLogo = document.querySelector('.sidebar_logo')
 const newWidget_btn = document.getElementById('new_widget_btn')
 const addClock_btn = document.getElementById('add_clock_btn')
 const settings_btn = document.getElementById('settings_btn')
+const closeSidebarIcon = document.getElementById('close_sidebar')
 
 const newWidget_modal = document.getElementById('new_widget_modal')
 const addClock_modal = document.getElementById('add_clock_modal')
@@ -50,6 +51,8 @@ settings_btn.addEventListener('click', () => {
     }
 })
 
+closeSidebarIcon.addEventListener('click', closeSidebar)
+
 function openModal(modal) {
     closeModal(newWidget_modal)
     closeModal(addClock_modal)
@@ -72,6 +75,7 @@ function openSidebar() {
     addClass(newWidget_btn, 'openned')
     addClass(addClock_btn, 'active')
     addClass(settings_btn, 'active')
+    addClass(closeSidebarIcon, 'sidebar_open')
     removeClass(sidebarNav, 'close')
         
 }
@@ -84,6 +88,7 @@ function closeSidebar() {
     removeClass(newWidget_btn, 'active')
     removeClass(settings_btn, 'active')
     removeClass(addClock_btn, 'active')
+    removeClass(closeSidebarIcon, 'sidebar_open')
     addClass(sidebarNav, 'close')
 
     closeModal(newWidget_modal)

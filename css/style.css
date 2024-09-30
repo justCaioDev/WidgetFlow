@@ -80,6 +80,7 @@ main .widget_dropzone {
 }
 
 main .sidebar_nav {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -99,6 +100,22 @@ main .sidebar_nav {
     z-index: 99;
     background-color: var(--sidebar-bg);
     box-shadow: 4px 0 8px rgba(0, 0, 0, 0.25);
+}
+
+main .close_icon {
+    display: none;
+    position: absolute;
+    right: 8px;
+    top: 10px;
+    cursor: pointer;
+}
+
+main .close_icon:hover {
+    color: var(--primary-text-hover);
+}
+
+main .sidebar_open {
+    display: block;
 }
 
 main .open {
