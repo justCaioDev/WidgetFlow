@@ -9,7 +9,7 @@
     --light-main-bg: #BFBDBA;
 
     --sidebar-bg: #0D0D0D;
-    --sidebar-active-state-bg: rgba(13, 13, 13, 0.8);
+    --sidebar-active-state-bg: rgba(13, 13, 13, 0.9);
 
     --light-btn-bg: #D9D9D9;
     --active-state-btn-bg: #0D0D0D;
@@ -24,7 +24,7 @@
     --half-margin-content: 24px;
     --small-margin-content: 12px;
 
-    --border-radius: 14px;
+    --border-radius: 8px;
 }
 
 body {
@@ -207,12 +207,13 @@ main .openned:hover .new_widget {
 
 main .new_widget_modal {  
     position: fixed;
-    left: 264px;
+    left: 272px;
     top: 80px;
     scale: 0;
     max-width: 324px;
     overflow: hidden;
     transition: .3s ease-in-out;
+    opacity: 0;
     border-radius: var(--border-radius);
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
     background-color: var(--sidebar-active-state-bg);
@@ -333,16 +334,202 @@ main .new_widget_modal {
     background-color: var(--active-state-btn-bg);
 }
 
-main .modal_open {
-    scale: 100%;
-    padding: 24px 8px;
-}
-
 main .modal_openned {
     background-color: var(--active-state-btn-bg);
     color: var(--primary-text-hover);
 }
 
 main .modal_openned .new_widget {
+    color: var(--primary-text-hover);
+}
+
+main .add_clock_modal {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    gap: 12px;
+    position: fixed;
+    left: 272px;
+    top: 150px;
+    scale: 0;
+    max-width: 324px;
+    width: 100%;
+    overflow: hidden;
+    transition: .3s ease-in-out;
+    opacity: 0;
+    border-radius: var(--border-radius);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    background-color: var(--sidebar-active-state-bg);
+}
+
+.add_clock_modal button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: .3s;
+    background-color: var(--light-btn-bg);
+    color: var(--secondary-text-color);
+}
+
+.add_clock_modal button:hover {
+    color: var(--primary-text-hover);
+    background-color: var(--active-state-btn-bg);
+}
+
+.add_clock_modal .clocks_options {
+    margin-bottom: 12px;
+    width: 100%;
+}
+
+.add_clock_modal .clock_option {
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    background-color: var(--sidebar-bg);
+}
+
+main .settings_modal {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+    position: fixed;
+    left: 272px;
+    bottom: 14px;
+    scale: 0;
+    max-width: 324px;
+    width: 100%;
+    overflow: hidden;
+    transition: .3s ease-in-out;
+    opacity: 0;
+    border-radius: var(--border-radius);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    background-color: var(--sidebar-active-state-bg);
+}
+
+.settings_modal button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: .3s;
+    background-color: var(--light-btn-bg);
+    color: var(--secondary-text-color);
+}
+
+.settings_modal button:hover {
+    color: var(--primary-text-hover);
+    background-color: var(--active-state-btn-bg);
+}
+
+.settings_modal .background_color, .widget_type {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    width: 100%;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    background-color: var(--active-state-btn-bg);
+}
+
+.settings_modal .background_color {
+    margin-bottom: 4px;
+}
+
+.settings_modal .colors {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    gap: 12px;
+}
+
+.settings_modal .color {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #BFBDBA;
+    cursor: pointer;
+}
+
+.settings_modal .image {
+    margin-top: 4px;
+}
+
+.settings_modal .types {
+    width: 100%;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    padding: 8px;
+}
+
+.settings_modal .type {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.settings_modal .type_box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    transition: .3s;
+}
+
+.settings_modal .type_box:hover {
+    cursor: pointer;
+    background-color: var(--transparent-active-state-btn);
+}
+
+.settings_modal .square {
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--primary-text-color);
+}
+
+.settings_modal .small_rounded {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    border: 2px solid var(--primary-text-color);
+}
+
+.settings_modal .medium_rounded {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: 2px solid var(--primary-text-color);
+}
+
+.types p {
+    text-align: center;
+}
+
+main .modal_open {
+    scale: 100%;
+    opacity: 1;
+    padding: 24px 8px;
+}
+
+main .selected {
+    background-color: var(--transparent-active-state-btn);
     color: var(--primary-text-hover);
 }

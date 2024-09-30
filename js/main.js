@@ -6,6 +6,8 @@ const addClock_btn = document.getElementById('add_clock_btn')
 const settings_btn = document.getElementById('settings_btn')
 
 const newWidget_modal = document.getElementById('new_widget_modal')
+const addClock_modal = document.getElementById('add_clock_modal')
+const settings_modal = document.getElementById('settings_modal')
 
 openSidebar_btn.addEventListener('click', () => {
     if(sidebarNav.classList.contains('close')){
@@ -26,7 +28,35 @@ newWidget_btn.addEventListener('click', () => {
     }
 })
 
+addClock_btn.addEventListener('click', () => {
+    if(!addClock_modal.classList.contains('modal_open')){
+        openSidebar()
+        openModal(addClock_modal)
+        addClass(addClock_btn, 'selected')
+    } else {
+        closeModal(addClock_modal)
+        removeClass(addClock_btn, 'selected')
+    }
+})
+
+settings_btn.addEventListener('click', () => {
+    if(!settings_modal.classList.contains('modal_open')){
+        openSidebar()
+        openModal(settings_modal)
+        addClass(settings_btn, 'selected')
+    } else {
+        closeModal(settings_modal)
+        removeClass(settings_btn, 'selected')
+    }
+})
+
 function openModal(modal) {
+    closeModal(newWidget_modal)
+    closeModal(addClock_modal)
+    closeModal(settings_modal)
+    removeClass(newWidget_btn, 'modal_openned')
+    removeClass(addClock_btn, 'selected')
+    removeClass(settings_btn, 'selected')
     addClass(modal, 'modal_open')
 }
 
@@ -57,7 +87,11 @@ function closeSidebar() {
     addClass(sidebarNav, 'close')
 
     closeModal(newWidget_modal)
+    closeModal(addClock_modal)
+    closeModal(settings_modal)
     removeClass(newWidget_btn, 'modal_openned')
+    removeClass(addClock_btn, 'selected')
+    removeClass(settings_btn, 'selected')
 }
 
 function addClass(el, className) {
