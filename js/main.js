@@ -7,9 +7,17 @@ const settings_btn = document.getElementById('settings_btn')
 
 const newWidget_modal = document.getElementById('new_widget_modal')
 
-openSidebar_btn.addEventListener('click', openSidebar)
+openSidebar_btn.addEventListener('click', () => {
+    if(sidebarNav.classList.contains('close')){
+       openSidebar()
+    } else {
+        closeSidebar()
+    }
+})
+
 newWidget_btn.addEventListener('click', () => { 
     if(!newWidget_modal.classList.contains('modal_open')){
+        openSidebar()
         openModal(newWidget_modal)
         addClass(newWidget_btn, 'modal_openned')
     } else {
@@ -27,29 +35,29 @@ function closeModal(modal) {
 }
 
 function openSidebar() {
-    
-    if(sidebarNav.classList.contains('close')){
-        addClass(sidebarNav, 'open')
-        addClass(sidebarLogo, 'active')
-        addClass(openSidebar_btn, 'active')
-        addClass(newWidget_btn, 'active')
-        addClass(newWidget_btn, 'openned')
-        addClass(addClock_btn, 'active')
-        addClass(settings_btn, 'active')
-        removeClass(sidebarNav, 'close')
-    } else {
-        removeClass(sidebarNav, 'open')
-        removeClass(sidebarLogo, 'active')
-        removeClass(openSidebar_btn, 'active')
-        removeClass(newWidget_btn, 'openned')
-        removeClass(newWidget_btn, 'active')
-        removeClass(settings_btn, 'active')
-        removeClass(addClock_btn, 'active')
-        addClass(sidebarNav, 'close')
+    addClass(sidebarNav, 'open')
+    addClass(sidebarLogo, 'active')
+    addClass(openSidebar_btn, 'active')
+    addClass(newWidget_btn, 'active')
+    addClass(newWidget_btn, 'openned')
+    addClass(addClock_btn, 'active')
+    addClass(settings_btn, 'active')
+    removeClass(sidebarNav, 'close')
+        
+}
 
-        closeModal(newWidget_modal)
-        removeClass(newWidget_btn, 'modal_openned')
-    }
+function closeSidebar() {
+    removeClass(sidebarNav, 'open')
+    removeClass(sidebarLogo, 'active')
+    removeClass(openSidebar_btn, 'active')
+    removeClass(newWidget_btn, 'openned')
+    removeClass(newWidget_btn, 'active')
+    removeClass(settings_btn, 'active')
+    removeClass(addClock_btn, 'active')
+    addClass(sidebarNav, 'close')
+
+    closeModal(newWidget_modal)
+    removeClass(newWidget_btn, 'modal_openned')
 }
 
 function addClass(el, className) {
