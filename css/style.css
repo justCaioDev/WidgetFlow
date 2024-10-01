@@ -60,7 +60,7 @@ i {
 main {
     width: 100%;
     height: 100%;
-    padding-top: 6px;
+    padding: 12px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -71,20 +71,24 @@ main .widgethub_grid_container {
     grid-template-columns: repeat(15, 1fr);
     grid-template-rows: repeat(9, 1fr);
     column-gap: 14px;
-    row-gap: 28px;
+    row-gap: 26px;
     width: 100%;
-    max-width: 1320px;
-    height: 720px;
-    margin-left: 80px;
-    padding: 14px;
+    max-width: 1280px;
+    height: 100%;
+    margin-left: 64px;
     transition: .4s;
     border-radius: var(--border-radius);
 }
+
+/* 196 pixels de column gap */
+/* 92px */
+/* 208 pixels de row gap */
 
 main .widget_dropzone {
     position: relative;
     border-radius: 4px;
     transition: .4s;
+    background-color: #BFBDBA;
 }
 
 main .sidebar_nav {
@@ -575,7 +579,7 @@ main .widget {
     text-align: center;
     border-radius: var(--medium-border-radius);
     z-index: 99;
-    transition: .3s;
+    transition: .3s ease-in-out;
     color: var(--primary-text-color);
     background-position: center;
     background-size: cover;
@@ -583,7 +587,7 @@ main .widget {
 }
 
 main .widget:hover {
-    scale: 105%;
+    scale: 103%;
     color: var(--primary-text-hover);
 }
 
@@ -627,5 +631,12 @@ main .has_title::after {
 main .settigs_color_selected {
     border: 2px solid white;
     scale: 105%;
+}
+
+@media screen and (max-width: 976px) {
+    main .widgethub_grid_container {
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: repeat(10, 1fr);
+    }
 }
 

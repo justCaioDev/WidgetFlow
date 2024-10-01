@@ -28,8 +28,6 @@ const handleTitle = document.getElementById('title')
 const handleSettingsImage = document.getElementById('settings_image')
 
 
-
-
 let smallSize = {
     width: dropzoneSize.clientWidth,
     height: dropzoneSize.clientHeight
@@ -37,13 +35,55 @@ let smallSize = {
 
 let mediumSize = {
     width:  (dropzoneSize.clientWidth * 2) + 14,
-    height: (dropzoneSize.clientHeight * 2) + 28
+    height: (dropzoneSize.clientHeight * 2) + 26
 }
 
 let largeSize = {
     width: (dropzoneSize.clientWidth * 3) + (14 * 2),
-    height: (dropzoneSize.clientHeight * 3) + (28 * 2)
+    height: (dropzoneSize.clientHeight * 3) + (26 * 2)
 }
+
+
+window.addEventListener('resize', ()=> {
+    const widgets = document.querySelectorAll('div.widget')
+
+    console.log('Tela mudou de tamanho');
+    let smallSize = {
+        width: dropzoneSize.clientWidth,
+        height: dropzoneSize.clientHeight
+    }
+    
+    let mediumSize = {
+        width:  (dropzoneSize.clientWidth * 2) + 14,
+        height: (dropzoneSize.clientHeight * 2) + 26
+    }
+    
+    let largeSize = {
+        width: (dropzoneSize.clientWidth * 3) + (14 * 2),
+        height: (dropzoneSize.clientHeight * 3) + (26 * 2)
+    }
+
+    widgets.forEach(widget => {
+        if(widget.dataset.size == 'small') {
+            widget.style.maxWidth = `${smallSize.width}px`
+            widget.style.maxHeight = `${smallSize.height}px`  
+            console.log('Mudou o size do widget small');
+        } if (widget.dataset.size == 'medium') {
+            widget.style.maxWidth = `none`
+            widget.style.maxHeight = `none`
+            widget.style.minWidth = `${mediumSize.width}px`
+            widget.style.minHeight = `${mediumSize.height}px`
+            console.log('Mudou o size do widget medium');
+        } if (widget.dataset.size == 'large') {
+            widget.style.maxWidth = `none`
+            widget.style.maxHeight = `none`
+            widget.style.minWidth = `${largeSize.width}px`
+            widget.style.minHeight = `${largeSize.height}px`
+            console.log('Mudou o size do widget large');
+        }
+    })
+    
+})
 
 
 document.addEventListener('dragover', (e) => e.preventDefault())
@@ -183,17 +223,20 @@ function createWidget() {
 
         if(sizeSelected.dataset.size == 'small') {
             newWidget.style.maxWidth = `${smallSize.width}px`
-            newWidget.style.maxHeight = `${smallSize.height}px`   
+            newWidget.style.maxHeight = `${smallSize.height}px`
+            newWidget.dataset.size = 'small'   
         } if (sizeSelected.dataset.size == 'medium') {
             newWidget.style.maxWidth = `none`
             newWidget.style.maxHeight = `none`
             newWidget.style.minWidth = `${mediumSize.width}px`
             newWidget.style.minHeight = `${mediumSize.height}px`
+            newWidget.dataset.size = 'medium'   
         } if (sizeSelected.dataset.size == 'large') {
             newWidget.style.maxWidth = `none`
             newWidget.style.maxHeight = `none`
             newWidget.style.minWidth = `${largeSize.width}px`
             newWidget.style.minHeight = `${largeSize.height}px`
+            newWidget.dataset.size = 'large'   
         }
 
         if(handleTitle.value !== '') {
