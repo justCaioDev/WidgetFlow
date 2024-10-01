@@ -89,7 +89,7 @@ main .widget_dropzone {
     position: relative;
     border-radius: 4px;
     transition: .4s;
-    background-color: #BFBDBA;
+    /* background-color: #BFBDBA; */
 }
 
 main .sidebar_nav {

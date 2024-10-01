@@ -43,6 +43,74 @@ let largeSize = {
     height: (dropzoneSize.clientHeight * 3) + (26 * 2)
 }
 
+window.addEventListener('DOMContentLoaded', () => {
+    if(localStorage.hasOwnProperty('widgets')) {
+        
+        widgets = JSON.parse(localStorage.getItem('widgets'))
+        console.log('TEM WIDGETS EXISTENTES');
+        for(i = 0; i < widgets.length; i++){
+            console.log(`Existem ${i} widgets`);
+            const existingWidget = document.createElement('div')
+            const existingWidget_a = document.createElement('a')
+            existingWidget.draggable = true
+            existingWidget_a.setAttribute('href', widgets[i].widget_link)
+            existingWidget_a.setAttribute('target', '_blank')
+            existingWidget.style.backgroundColor = widgets[i].widget_color
+            existingWidget.dataset.id = widgets[i].widget_id
+            addClass(existingWidget, 'widget')
+            if(widgets[i].widget_title !== '') {
+                addClass(existingWidget, 'has_title')
+                existingWidget.dataset.title = widgets[i].widget_title
+            }
+    
+            existingWidget.addEventListener('dragstart', () => {
+                dragStart(existingWidget)
+            } )
+            existingWidget.addEventListener('dragend', () => {
+                dragEnd(existingWidget)
+            })
+            existingWidget.addEventListener('drag', () => {
+                dragWidget(existingWidget)
+            })
+
+            if(widgets[i].widget_size == 'small') {
+                existingWidget.style.maxWidth = `${smallSize.width}px`
+                existingWidget.style.maxHeight = `${smallSize.height}px`
+                existingWidget.dataset.size = 'small'   
+            } if (widgets[i].widget_size == 'medium') {
+                existingWidget.style.maxWidth = `none`
+                existingWidget.style.maxHeight = `none`
+                existingWidget.style.minWidth = `${mediumSize.width}px`
+                existingWidget.style.minHeight = `${mediumSize.height}px`
+                existingWidget.dataset.size = 'medium'   
+            } if (widgets[i].widget_size == 'large') {
+                existingWidget.style.maxWidth = `none`
+                existingWidget.style.maxHeight = `none`
+                existingWidget.style.minWidth = `${largeSize.width}px`
+                existingWidget.style.minHeight = `${largeSize.height}px`
+                existingWidget.dataset.size = 'large'   
+            }
+
+            existingWidget.style.backgroundImage = widgets[i].widget_image
+
+
+            dropzones.forEach(zoneId => {
+                if(zoneId.dataset.id == existingWidget.dataset.id){
+                    console.log(`Achamos as divs ${zoneId.dataset.id}`);
+
+                    existingWidget.appendChild(existingWidget_a)
+                    zoneId.appendChild(existingWidget)
+                    
+                }
+
+                
+            })
+            console.log(`Esse id existe ${existingWidget.dataset.id}`);
+        }
+        
+    }
+})
+
 
 window.addEventListener('resize', ()=> {
     const widgets = document.querySelectorAll('div.widget')
@@ -120,10 +188,18 @@ function dropWidget() {
     if(hasWidget !== null){
         const lastPosition = document.querySelector('div.last_position')
         lastPosition.appendChild(hasWidget)
+        hasWidget.dataset.id = lastPosition.dataset.id
+        widgetDragged.dataset.id = newPosition.dataset.id
+        localStorage.setItem('widget_id', widgetDragged.dataset.id)
         this.appendChild(widgetDragged)
     } else {
+        widgetDragged.dataset.id = this.dataset.id
+        localStorage.setItem('widget_id', widgetDragged.dataset.id)
         this.appendChild(widgetDragged)
     }
+
+    refreshID()
+
 
 }
 
@@ -206,27 +282,46 @@ handleSettingsImage.addEventListener('change', function (e) {
     
     reader.addEventListener('load', function(e) {
         const readerTarget = e.target
-        saveSettings()
         handleSettingsImage.dataset.image = `url(${readerTarget.result})` 
+        saveSettings()
         
     })
     
     reader.readAsDataURL(file)
 })
 
+
 function createWidget() {
     const colorSelected = document.querySelector('div.color_selected')
     const sizeSelected = document.querySelector('div.size_selected')
+
     
     if(handleLink.value !== '' && colorSelected !== null && sizeSelected !== null) {
-            
+        let widgets = new Array()
         const newWidget = document.createElement('div')
         const newWidget_a = document.createElement('a')
         newWidget.draggable = true
+        newWidget_a.dataset.link = handleLink.value
         newWidget_a.setAttribute('href', handleLink.value)
         newWidget_a.setAttribute('target', '_blank')
         newWidget.style.backgroundColor = colorSelected.dataset.color
         addClass(newWidget, 'widget')
+
+
+        if(localStorage.hasOwnProperty('widgets')){
+            widgets = JSON.parse(localStorage.getItem('widgets'))
+        }
+
+        widgets.push({widget_link: handleLink.value,
+                    widget_title: handleTitle.value,
+                    widget_size: sizeSelected.dataset.size, 
+                    widget_color: colorSelected.dataset.color, 
+                    widget_image: handleImage.dataset.image,
+                    widget_id: 0 
+                })
+
+
+        localStorage.setItem('widgets', JSON.stringify(widgets))  
 
         if(sizeSelected.dataset.size == 'small') {
             newWidget.style.maxWidth = `${smallSize.width}px`
@@ -269,12 +364,37 @@ function createWidget() {
         closeModal(newWidget_modal)
         cleanNewWidgetModal()
         removeClass(newWidget_btn, 'modal_openned')
-    
+
+        console.log(newWidget);
+        
         
     } else {
         return
     }
 }
+
+function refreshID(){
+    if(localStorage.hasOwnProperty('widgets')){
+        widgets = JSON.parse(localStorage.getItem('widgets'))
+    }
+    
+    const widgetDragged = document.querySelector('div.dragging')
+    
+    for(i = 0; i < widgets.length; i++) {
+        if(widgets[i].widget_title == widgetDragged.dataset.title){
+            widgets[i].widget_id = widgetDragged.dataset.id
+            console.log(widgets[i]);
+
+            localStorage.setItem('widgets', JSON.stringify(widgets)) 
+            
+        }
+    }
+    
+}
+
+
+
+
 
 handleImage.addEventListener('change', function (e) {
     const inputTarget = e.target
