@@ -99,8 +99,6 @@ dropzones.forEach(dropzone => {
 
 })
 
-
-
 function dragEnter() {
     
 }
@@ -115,9 +113,18 @@ function dragOver() {
 }
 
 function dropWidget() {
+    const newPosition = this
+    const hasWidget = newPosition.querySelector('div.widget')
     const widgetDragged = document.querySelector('div.dragging')
 
-    this.appendChild(widgetDragged)
+    if(hasWidget !== null){
+        const lastPosition = document.querySelector('div.last_position')
+        lastPosition.appendChild(hasWidget)
+        this.appendChild(widgetDragged)
+    } else {
+        this.appendChild(widgetDragged)
+    }
+
 }
 
 createWidget_btn.addEventListener('click', () => {
@@ -303,18 +310,41 @@ function cleanNewWidgetModal() {
 }
 
 function dragStart(widget) {
+    const handleWidget = widget
+    const lastPosition = handleWidget.parentElement
+    
     dropzones.forEach(dropzone => addClass(dropzone, 'dropzone_active'))
     
+    
     addClass(dropzones_container, 'container_active')
+    addClass(lastPosition, 'last_position')
 }
 
 function dragEnd(widget) {
+    const lastPosition = document.querySelector('div.last_position')
+    
     removeClass(widget, 'dragging')
     removeClass(dropzones_container, 'container_active')
+    removeClass(lastPosition, 'last_position')
     dropzones.forEach(dropzone => {
         removeClass(dropzone, 'dropzone_active')
         removeClass(dropzone, 'dropzone_over')
     })  
+
+    let smallSize = {
+        width: dropzoneSize.clientWidth,
+        height: dropzoneSize.clientHeight
+    }
+    
+    let mediumSize = {
+        width:  (dropzoneSize.clientWidth * 2) + 14,
+        height: (dropzoneSize.clientHeight * 2) + 26
+    }
+    
+    let largeSize = {
+        width: (dropzoneSize.clientWidth * 3) + (14 * 2),
+        height: (dropzoneSize.clientHeight * 3) + (26 * 2)
+    }
  
 }
 
