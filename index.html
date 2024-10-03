@@ -282,8 +282,56 @@
                     </div>
                 </aside>
             </div>
-
         </nav>
+        <div id="edit_widget_modal" class="edit_widget_modal">
+            <i id="close_edit_widget_modal" class="fa-solid fa-xmark fa-sm close_edit_widget_modal"></i>
+            <div class="edit_link">
+                <label for="link">Link:</label>
+                <input type="text" name="link" id="edit_link" placeholder="https://">
+            </div>
+            <div class="edit_color">
+                <p>Color:</p>
+                <div class="edit_colors_option">
+                    <div class="edit_color_pick color_selected" data-color="#ffffff"></div>
+                    <div class="edit_color_pick" data-color="#000000"></div>
+                    <div class="edit_color_pick" data-color="#f44336"></div>
+                    <div class="edit_color_pick" data-color="#8fce00"></div>
+                    <div class="edit_color_pick" data-color="#2986cc"></div>
+                    <div class="edit_color_pick" data-color="#6a329f"></div>
+                    <div class="edit_color_pick" data-color="#ffd966"></div>
+                    <div class="edit_color_pick" data-color="#744700"></div>
+                    <div class="edit_color_pick" data-color="#ce7e00"></div>
+                    <div class="edit_color_pick" data-color="#16537e"></div>
+                    <div class="edit_color_pick" data-color="#c90076"></div>
+                    <div class="edit_color_pick" data-color="#5b5b5b"></div>
+                    <div class="edit_color_pick" data-color="#bcbcbc"></div>
+                    <div class="edit_color_pick" data-color="#444444"></div>
+                </div>
+            </div>
+            <p class="or">Or</p>
+            <div class="edit_image">
+                <label for="image">Image:</label>
+                <input type="file" accept="image/png image/jpg" id="edit_image" name="image">
+            </div>
+            <div class="edit_size">
+                <p>Size:</p>
+                <div class="edit_sizes_option">
+                    <div class="edit_size_pick" data-size="small">1 x 1</div>
+                    <div class="edit_size_pick" data-size="medium">2 x 2</div>
+                    <div class="edit_size_pick" data-size="large">3 x 3</div>
+                </div>
+            </div>
+            <div class="edit_title">
+                <label for="title">Title:</label>
+                <input type="text" name="title" id="edit_title" placeholder="Google">
+            </div>
+            <p class="optional">Optional</p>
+            <button id="create_widget_btn">
+                <i class="fa-regular fa-pen-to-square fa-lg"></i>
+                Edit Widget
+            </button>
+        </div>
+
     </main>
 </body>
 </html>

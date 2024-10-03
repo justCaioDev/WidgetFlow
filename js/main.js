@@ -6,11 +6,13 @@ const addClock_btn = document.getElementById('add_clock_btn')
 const settings_btn = document.getElementById('settings_btn')
 const createWidget_btn = document.getElementById('create_widget_btn')
 const closeSidebarIcon = document.getElementById('close_sidebar')
+const closeEditWidget_modal = document.getElementById('close_edit_widget_modal')
 const saveSettings_btn = document.getElementById('save_settings_btn')
 
 const newWidget_modal = document.getElementById('new_widget_modal')
 const addClock_modal = document.getElementById('add_clock_modal')
 const settings_modal = document.getElementById('settings_modal')
+const editWidget_modal = document.getElementById('edit_widget_modal')
 
 const bgImage = document.getElementById('main_container')
 const dropzones_container = document.getElementById('widgethub_grid_container')
@@ -22,9 +24,9 @@ const handleColors = document.querySelectorAll('.color_pick')
 const handleLink = document.getElementById('link')
 const handleImage = document.getElementById('image')
 const handleSizes = document.querySelectorAll('.size_pick')
+const handleTitle = document.getElementById('title')  
 const handleTypes = document.querySelectorAll('.type_box')
 const handleSettingsColors = document.querySelectorAll('.settings_color')
-const handleTitle = document.getElementById('title')  
 const handleSettingsImage = document.getElementById('settings_image')
 
 
@@ -44,19 +46,26 @@ let largeSize = {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+    // const typeSelected = document.querySelector('div.type_selected')
+    // typeSelected.dataset.type = localStorage.getItem('settings_size') 
+
+
+    
+    // console.log(typeSelected.dataset.type);
+    
     if(localStorage.hasOwnProperty('widgets')) {
-        
         widgets = JSON.parse(localStorage.getItem('widgets'))
-        console.log('TEM WIDGETS EXISTENTES');
         for(i = 0; i < widgets.length; i++){
-            console.log(`Existem ${i} widgets`);
             const existingWidget = document.createElement('div')
             const existingWidget_a = document.createElement('a')
             existingWidget.draggable = true
             existingWidget_a.setAttribute('href', widgets[i].widget_link)
             existingWidget_a.setAttribute('target', '_blank')
+            const editWidget_btn = document.createElement('button')
+            editWidget_btn.innerHTML = '<i class="fa-regular fa-pen-to-square fa-sm"></i>'
             existingWidget.style.backgroundColor = widgets[i].widget_color
             existingWidget.dataset.id = widgets[i].widget_id
+            addClass(editWidget_btn, 'editWidget')
             addClass(existingWidget, 'widget')
             if(widgets[i].widget_title !== '') {
                 addClass(existingWidget, 'has_title')
@@ -71,6 +80,10 @@ window.addEventListener('DOMContentLoaded', () => {
             })
             existingWidget.addEventListener('drag', () => {
                 dragWidget(existingWidget)
+            })
+
+            editWidget_btn.addEventListener('click', ()=> {
+                editWidget(existingWidget)
             })
 
             if(widgets[i].widget_size == 'small') {
@@ -90,23 +103,48 @@ window.addEventListener('DOMContentLoaded', () => {
                 existingWidget.style.minHeight = `${largeSize.height}px`
                 existingWidget.dataset.size = 'large'   
             }
-
             existingWidget.style.backgroundImage = widgets[i].widget_image
-
-
             dropzones.forEach(zoneId => {
                 if(zoneId.dataset.id == existingWidget.dataset.id){
-                    console.log(`Achamos as divs ${zoneId.dataset.id}`);
-
                     existingWidget.appendChild(existingWidget_a)
+                    existingWidget.appendChild(editWidget_btn)
                     zoneId.appendChild(existingWidget)
-                    
                 }
-
-                
             })
-            console.log(`Esse id existe ${existingWidget.dataset.id}`);
         }
+
+        // const allWidgets = document.querySelectorAll('.widget')
+        // const square = document.querySelector("[data-type='square']")
+        // const small = document.querySelector("[data-type='small']")
+        // const medium = document.querySelector("[data-type='medium']")
+
+        // allWidgets.forEach(widget => {
+        //     if(typeSelected.dataset.type == 'square') {
+        //         widget.style.borderRadius = 'var(--none-border-radius)'
+        //     }
+        //     if(typeSelected.dataset.type == 'small') {
+        //         widget.style.borderRadius = 'var(--medium-border-radius)'
+        //     }
+        //     if(typeSelected.dataset.type == 'medium') {
+        //         widget.style.borderRadius = 'var(--large-border-radius)'
+        //     }
+        // })
+
+        // handleTypes.forEach(handleType => {
+        //     handleType.classList.remove('type_selected')  
+        // })
+
+        // if(typeSelected.dataset.type == 'square'){
+        //     square.classList.add('type_selected')
+        // }
+
+        // if(typeSelected.dataset.type == 'small'){
+        //     small.classList.add('type_selected')
+        // }
+
+        // if(typeSelected.dataset.type == 'medium'){
+        //     medium.classList.add('type_selected')
+        // }
         
     }
 })
@@ -114,45 +152,39 @@ window.addEventListener('DOMContentLoaded', () => {
 
 window.addEventListener('resize', ()=> {
     const widgets = document.querySelectorAll('div.widget')
-
-    console.log('Tela mudou de tamanho');
     let smallSize = {
         width: dropzoneSize.clientWidth,
         height: dropzoneSize.clientHeight
     }
-    
     let mediumSize = {
         width:  (dropzoneSize.clientWidth * 2) + 14,
         height: (dropzoneSize.clientHeight * 2) + 26
     }
-    
     let largeSize = {
         width: (dropzoneSize.clientWidth * 3) + (14 * 2),
         height: (dropzoneSize.clientHeight * 3) + (26 * 2)
     }
-
     widgets.forEach(widget => {
         if(widget.dataset.size == 'small') {
             widget.style.maxWidth = `${smallSize.width}px`
             widget.style.maxHeight = `${smallSize.height}px`  
-            console.log('Mudou o size do widget small');
         } if (widget.dataset.size == 'medium') {
             widget.style.maxWidth = `none`
             widget.style.maxHeight = `none`
             widget.style.minWidth = `${mediumSize.width}px`
             widget.style.minHeight = `${mediumSize.height}px`
-            console.log('Mudou o size do widget medium');
         } if (widget.dataset.size == 'large') {
             widget.style.maxWidth = `none`
             widget.style.maxHeight = `none`
             widget.style.minWidth = `${largeSize.width}px`
             widget.style.minHeight = `${largeSize.height}px`
-            console.log('Mudou o size do widget large');
         }
     })
-    
 })
 
+closeEditWidget_modal.addEventListener('click', ()=> {
+    closeModal(editWidget_modal)
+})
 
 document.addEventListener('dragover', (e) => e.preventDefault())
 
@@ -194,63 +226,12 @@ function dropWidget() {
         this.appendChild(widgetDragged)
     } else {
         widgetDragged.dataset.id = this.dataset.id
+        // editWidget_modal.dataset.id = this.dataset.id
         localStorage.setItem('widget_id', widgetDragged.dataset.id)
         this.appendChild(widgetDragged)
     }
-
     refreshID()
-
-
 }
-
-createWidget_btn.addEventListener('click', () => {
-    createWidget()
-})
-
-openSidebar_btn.addEventListener('click', () => {
-    if(sidebarNav.classList.contains('close')){
-       openSidebar()
-    } else {
-        closeSidebar()
-    }
-})
-
-newWidget_btn.addEventListener('click', () => { 
-    if(!newWidget_modal.classList.contains('modal_open')){
-        openSidebar()
-        openModal(newWidget_modal)
-        addClass(newWidget_btn, 'modal_openned')
-    } else {
-        closeModal(newWidget_modal)
-        removeClass(newWidget_btn, 'modal_openned')
-    }
-})
-
-addClock_btn.addEventListener('click', () => {
-    if(!addClock_modal.classList.contains('modal_open')){
-        openSidebar()
-        openModal(addClock_modal)
-        addClass(addClock_btn, 'selected')
-    } else {
-        closeModal(addClock_modal)
-        removeClass(addClock_btn, 'selected')
-    }
-})
-
-settings_btn.addEventListener('click', () => {
-    if(!settings_modal.classList.contains('modal_open')){
-        openSidebar()
-        openModal(settings_modal)
-        addClass(settings_btn, 'selected')
-    } else {
-        closeModal(settings_modal)
-        removeClass(settings_btn, 'selected')
-    }
-})
-
-closeSidebarIcon.addEventListener('click', closeSidebar)
-
-saveSettings_btn.addEventListener('click', saveSettings)
 
 function saveSettings() {
     const colorSelected = document.querySelector('div.settigs_color_selected')
@@ -260,12 +241,15 @@ function saveSettings() {
     widgets.forEach(widget => {
         if(typeSelected.dataset.type == 'square') {
             widget.style.borderRadius = 'var(--none-border-radius)'
+            localStorage.setItem('settings_size', typeSelected.dataset.type)
         }
         if(typeSelected.dataset.type == 'small') {
             widget.style.borderRadius = 'var(--medium-border-radius)'
+            localStorage.setItem('settings_size', typeSelected.dataset.type)
         }
         if(typeSelected.dataset.type == 'medium') {
             widget.style.borderRadius = 'var(--large-border-radius)'
+            localStorage.setItem('settings_size', typeSelected.dataset.type)
         }
     })
     const image = handleSettingsImage.dataset.image
@@ -277,16 +261,12 @@ function saveSettings() {
 handleSettingsImage.addEventListener('change', function (e) {
     const inputTarget = e.target
     const file = inputTarget.files[0]
-
     const reader = new FileReader()
-    
     reader.addEventListener('load', function(e) {
         const readerTarget = e.target
         handleSettingsImage.dataset.image = `url(${readerTarget.result})` 
         saveSettings()
-        
     })
-    
     reader.readAsDataURL(file)
 })
 
@@ -300,11 +280,16 @@ function createWidget() {
         let widgets = new Array()
         const newWidget = document.createElement('div')
         const newWidget_a = document.createElement('a')
+        const editWidget_btn = document.createElement('button')
+        editWidget_btn.innerHTML = '<i class="fa-regular fa-pen-to-square fa-sm"></i>'
+        addClass(editWidget_btn, 'editWidget')
         newWidget.draggable = true
         newWidget_a.dataset.link = handleLink.value
+        newWidget.dataset.link = handleLink.value
         newWidget_a.setAttribute('href', handleLink.value)
         newWidget_a.setAttribute('target', '_blank')
         newWidget.style.backgroundColor = colorSelected.dataset.color
+        newWidget.dataset.color = colorSelected.dataset.color
         addClass(newWidget, 'widget')
 
 
@@ -355,22 +340,76 @@ function createWidget() {
         newWidget.addEventListener('drag', () => {
             dragWidget(newWidget)
         })
+
+        editWidget_btn.addEventListener('click', ()=> {
+            editWidget(newWidget)
+            editWidget_modal.dataset.id = newWidget.dataset.id
+        })
         
         const image = handleImage.dataset.image
         newWidget.style.backgroundImage = image
+        newWidget.dataset.image = image
         
         newWidget.appendChild(newWidget_a)
+        newWidget.appendChild(editWidget_btn)
         createZone.appendChild(newWidget)
         closeModal(newWidget_modal)
         cleanNewWidgetModal()
         removeClass(newWidget_btn, 'modal_openned')
-
-        console.log(newWidget);
-        
-        
     } else {
         return
     }
+}
+
+function editWidget(widget){
+    const handleEditColors = document.querySelectorAll('.edit_color_pick')
+    const handleEditLink = document.getElementById('edit_link')
+    const handleEditImage = document.getElementById('edit_image')
+    const handleEditSizes = document.querySelectorAll('.edit_size_pick')
+    const handleEditTitle = document.getElementById('edit_title') 
+
+    handleEditLink.value = widget.dataset.link
+    handleEditTitle.value = widget.dataset.title
+
+    handleEditColors.forEach(handleEditColor => {
+        handleEditColor.addEventListener('click', selectColor)
+        handleEditColor.style.backgroundColor = handleEditColor.dataset.color
+    })
+    
+    function selectColor() {
+        handleEditColors.forEach(handleEditColor => {
+            removeClass(handleEditColor, 'color_selected')
+        })
+        addClass(this, 'color_selected')
+    }
+    
+    handleEditSizes.forEach(handleEditSize => {
+        handleEditSize.addEventListener('click', selectSize)
+    })
+    
+    function selectSize() {
+        handleEditSizes.forEach(handleEditSize => {
+            removeClass(handleEditSize, 'size_selected')
+        })
+        addClass(this, 'size_selected')
+    }
+
+    handleEditSizes.forEach(handleEditSize => {
+        removeClass(handleEditSize, 'size_selected')
+    }) 
+    
+    if(widget.dataset.size === 'small'){
+        const smallSize = editWidget_modal.querySelector("[data-size='small']")
+        addClass(smallSize, 'size_selected')
+    } if(widget.dataset.size === 'medium'){
+        const mediumSize = editWidget_modal.querySelector("[data-size='medium']")
+        addClass(mediumSize, 'size_selected')
+    } if(widget.dataset.size === 'large'){
+        const largeSize = editWidget_modal.querySelector("[data-size='large']")
+        addClass(largeSize, 'size_selected')
+    } 
+    openModal(editWidget_modal)
+    
 }
 
 function refreshID(){
@@ -383,18 +422,10 @@ function refreshID(){
     for(i = 0; i < widgets.length; i++) {
         if(widgets[i].widget_title == widgetDragged.dataset.title){
             widgets[i].widget_id = widgetDragged.dataset.id
-            console.log(widgets[i]);
-
             localStorage.setItem('widgets', JSON.stringify(widgets)) 
-            
         }
     }
-    
 }
-
-
-
-
 
 handleImage.addEventListener('change', function (e) {
     const inputTarget = e.target
@@ -435,7 +466,6 @@ function dragStart(widget) {
     
     dropzones.forEach(dropzone => addClass(dropzone, 'dropzone_active'))
     
-    
     addClass(dropzones_container, 'container_active')
     addClass(lastPosition, 'last_position')
 }
@@ -471,7 +501,6 @@ function dragEnd(widget) {
 function dragWidget(widget) {
     addClass(widget, 'dragging')
     closeSidebar()
-
 }
 
 handleColors.forEach(handleColor => {
@@ -576,3 +605,52 @@ function removeClass(el, className) {
     el.classList.remove(className)
     return
 }
+
+createWidget_btn.addEventListener('click', () => {
+    createWidget()
+})
+
+openSidebar_btn.addEventListener('click', () => {
+    if(sidebarNav.classList.contains('close')){
+       openSidebar()
+    } else {
+        closeSidebar()
+    }
+})
+
+newWidget_btn.addEventListener('click', () => { 
+    if(!newWidget_modal.classList.contains('modal_open')){
+        openSidebar()
+        openModal(newWidget_modal)
+        addClass(newWidget_btn, 'modal_openned')
+    } else {
+        closeModal(newWidget_modal)
+        removeClass(newWidget_btn, 'modal_openned')
+    }
+})
+
+addClock_btn.addEventListener('click', () => {
+    if(!addClock_modal.classList.contains('modal_open')){
+        openSidebar()
+        openModal(addClock_modal)
+        addClass(addClock_btn, 'selected')
+    } else {
+        closeModal(addClock_modal)
+        removeClass(addClock_btn, 'selected')
+    }
+})
+
+settings_btn.addEventListener('click', () => {
+    if(!settings_modal.classList.contains('modal_open')){
+        openSidebar()
+        openModal(settings_modal)
+        addClass(settings_btn, 'selected')
+    } else {
+        closeModal(settings_modal)
+        removeClass(settings_btn, 'selected')
+    }
+})
+
+closeSidebarIcon.addEventListener('click', closeSidebar)
+
+saveSettings_btn.addEventListener('click', saveSettings)
