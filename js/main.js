@@ -61,15 +61,21 @@ window.addEventListener('DOMContentLoaded', () => {
             existingWidget.draggable = true
             existingWidget_a.setAttribute('href', widgets[i].widget_link)
             existingWidget_a.setAttribute('target', '_blank')
+            existingWidget_a.dataset.link = widgets[i].widget_link
+            existingWidget.dataset.link = widgets[i].widget_link
             const editWidget_btn = document.createElement('button')
             editWidget_btn.innerHTML = '<i class="fa-regular fa-pen-to-square fa-sm"></i>'
             existingWidget.style.backgroundColor = widgets[i].widget_color
             existingWidget.dataset.id = widgets[i].widget_id
-            addClass(editWidget_btn, 'editWidget')
-            addClass(existingWidget, 'widget')
+            // addClass(editWidget_btn, 'editWidget')
+            // addClass(existingWidget, 'widget')
+            existingWidget.classList.add('widget')
+            editWidget_btn.classList.add('editWidget')
             if(widgets[i].widget_title !== '') {
                 addClass(existingWidget, 'has_title')
                 existingWidget.dataset.title = widgets[i].widget_title
+            } else {
+                existingWidget.dataset.title = ''
             }
     
             existingWidget.addEventListener('dragstart', () => {
@@ -84,9 +90,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
             editWidget_btn.addEventListener('click', ()=> {
                 editWidget(existingWidget)
+                existingWidget.classList.add('editing')
+                // addClass(existingWidget, 'editing')
+                editWidget_modal.dataset.id = existingWidget.dataset.id
             })
 
             if(widgets[i].widget_size == 'small') {
+                existingWidget.style.minWidth = `${smallSize.width}px`
+                existingWidget.style.minHeight = `${smallSize.height}px`
                 existingWidget.style.maxWidth = `${smallSize.width}px`
                 existingWidget.style.maxHeight = `${smallSize.height}px`
                 existingWidget.dataset.size = 'small'   
@@ -166,6 +177,8 @@ window.addEventListener('resize', ()=> {
     }
     widgets.forEach(widget => {
         if(widget.dataset.size == 'small') {
+            widget.style.minWidth = `${smallSize.width}px`
+            widget.style.minHeight = `${smallSize.height}px`  
             widget.style.maxWidth = `${smallSize.width}px`
             widget.style.maxHeight = `${smallSize.height}px`  
         } if (widget.dataset.size == 'medium') {
@@ -309,6 +322,8 @@ function createWidget() {
         localStorage.setItem('widgets', JSON.stringify(widgets))  
 
         if(sizeSelected.dataset.size == 'small') {
+            newWidget.style.minWidth = `${smallSize.width}px`
+            newWidget.style.minHeight = `${smallSize.height}px`
             newWidget.style.maxWidth = `${smallSize.width}px`
             newWidget.style.maxHeight = `${smallSize.height}px`
             newWidget.dataset.size = 'small'   
@@ -342,8 +357,11 @@ function createWidget() {
         })
 
         editWidget_btn.addEventListener('click', ()=> {
-            editWidget(newWidget)
-            editWidget_modal.dataset.id = newWidget.dataset.id
+            addClass(newWidget, 'editing')
+            const editedWidget = document.querySelector('div.editing')
+
+            editWidget(editedWidget)
+            editWidget_modal.dataset.id = editedWidget.dataset.id
         })
         
         const image = handleImage.dataset.image
@@ -367,9 +385,11 @@ function editWidget(widget){
     const handleEditImage = document.getElementById('edit_image')
     const handleEditSizes = document.querySelectorAll('.edit_size_pick')
     const handleEditTitle = document.getElementById('edit_title') 
+    const widgetEditLink = widget.querySelector('a')
+
+    widget.classList.add('editing')
 
     handleEditLink.value = widget.dataset.link
-    handleEditTitle.value = widget.dataset.title
 
     handleEditColors.forEach(handleEditColor => {
         handleEditColor.addEventListener('click', selectColor)
@@ -378,9 +398,12 @@ function editWidget(widget){
     
     function selectColor() {
         handleEditColors.forEach(handleEditColor => {
-            removeClass(handleEditColor, 'color_selected')
+            // removeClass(handleEditColor, 'color_selected')
+            handleEditColor.classList.remove('color_selected')
+
         })
-        addClass(this, 'color_selected')
+        // addClass(this, 'color_selected')
+        this.classList.add('color_selected')
     }
     
     handleEditSizes.forEach(handleEditSize => {
@@ -389,27 +412,106 @@ function editWidget(widget){
     
     function selectSize() {
         handleEditSizes.forEach(handleEditSize => {
-            removeClass(handleEditSize, 'size_selected')
+            // removeClass(handleEditSize, 'size_selected')
+            handleEditSize.classList.remove('size_selected')
         })
-        addClass(this, 'size_selected')
+        this.classList.add('size_selected')
+
     }
 
     handleEditSizes.forEach(handleEditSize => {
-        removeClass(handleEditSize, 'size_selected')
+        // removeClass(handleEditSize, 'size_selected')
+        handleEditSize.classList.remove('size_selected')
     }) 
     
     if(widget.dataset.size === 'small'){
         const smallSize = editWidget_modal.querySelector("[data-size='small']")
-        addClass(smallSize, 'size_selected')
+        smallSize.classList.add('size_selected')
     } if(widget.dataset.size === 'medium'){
         const mediumSize = editWidget_modal.querySelector("[data-size='medium']")
-        addClass(mediumSize, 'size_selected')
+        mediumSize.classList.add('size_selected')
     } if(widget.dataset.size === 'large'){
         const largeSize = editWidget_modal.querySelector("[data-size='large']")
-        addClass(largeSize, 'size_selected')
+        largeSize.classList.add('size_selected')
     } 
+
+    if(widget.dataset.title) {
+        handleEditTitle.value = widget.dataset.title
+        widget.classList.add('has_title')
+    } else {
+        handleEditTitle.value = ''
+    }
+
+    const saveEditWidget = document.getElementById('edit_widget_btn')
+
+    saveEditWidget.addEventListener('click', () => {
+        const sizeSelected = editWidget_modal.querySelector('.size_selected')
+        const colorSelected = editWidget_modal.querySelector('.color_selected')
+        const editedWidget = document.querySelector('div.editing')
+        const widgets = document.querySelectorAll('div.widget')
+        
+        widgets.forEach(widget => {
+            if(editWidget_modal.dataset.id === widget.dataset.id){
+                if(handleEditTitle.value !== ''){
+                    widget.dataset.title = handleEditTitle.value
+                    widget.classList.add('has_title')
+                } else {
+                    widget.dataset.title = ''
+                }
+                widget.dataset.link = handleEditLink.value
+                widgetEditLink.setAttribute('href', handleEditLink.value)
+            
+                console.log(`Este widget foi editado ${editedWidget}`);
+                if(localStorage.hasOwnProperty('widgets')){
+                    editableWidgets = JSON.parse(localStorage.getItem('widgets'))
+                }
+
+                widget.style.backgroundColor = colorSelected.dataset.color
+                widget.dataset.color = colorSelected.dataset.color
+                
+                if(sizeSelected.dataset.size == 'small') {
+                    widget.style.minWidth = `${smallSize.width}px`
+                    widget.style.minHeight = `${smallSize.height}px`
+                    widget.style.maxWidth = `${smallSize.width}px`
+                    widget.style.maxHeight = `${smallSize.height}px`
+                    widget.dataset.size = 'small'   
+                } if (sizeSelected.dataset.size == 'medium') {
+                    widget.style.maxWidth = `none`
+                    widget.style.maxHeight = `none`
+                    widget.style.minWidth = `${mediumSize.width}px`
+                    widget.style.minHeight = `${mediumSize.height}px`
+                    widget.dataset.size = 'medium'   
+                } if (sizeSelected.dataset.size == 'large') {
+                    widget.style.maxWidth = `none`
+                    widget.style.maxHeight = `none`
+                    widget.style.minWidth = `${largeSize.width}px`
+                    widget.style.minHeight = `${largeSize.height}px`
+                    widget.dataset.size = 'large'   
+                }
+
+                const image = handleEditImage.dataset.image
+                widget.style.backgroundImage = image
+                widget.dataset.image = image
+                handleEditImage.value = ''
+                handleEditImage.dataset.image = ''
+                
+                for(i = 0; i < editableWidgets.length; i++) {
+                    if(editableWidgets[i].widget_id == widget.dataset.id){
+                        editableWidgets[i].widget_title = widget.dataset.title
+                        editableWidgets[i].widget_size = widget.dataset.size
+                        editableWidgets[i].widget_color = widget.dataset.color
+                        editableWidgets[i].widget_link = widget.dataset.link
+                        editableWidgets[i].widget_image = widget.dataset.image
+                        localStorage.setItem('widgets', JSON.stringify(editableWidgets)) 
+                    }
+                }
+            }
+        })
+        widget.classList.remove('editing')
+        editWidget_modal.dataset.id = '0'
+        closeModal(editWidget_modal)
+    })
     openModal(editWidget_modal)
-    
 }
 
 function refreshID(){
@@ -420,7 +522,7 @@ function refreshID(){
     const widgetDragged = document.querySelector('div.dragging')
     
     for(i = 0; i < widgets.length; i++) {
-        if(widgets[i].widget_title == widgetDragged.dataset.title){
+        if(widgets[i].widget_link == widgetDragged.dataset.link){
             widgets[i].widget_id = widgetDragged.dataset.id
             localStorage.setItem('widgets', JSON.stringify(widgets)) 
         }
@@ -435,11 +537,22 @@ handleImage.addEventListener('change', function (e) {
     
     reader.addEventListener('load', function(e) {
         const readerTarget = e.target
-        createWidget()
         handleImage.dataset.image = `url(${readerTarget.result})` 
-        
     })
+    reader.readAsDataURL(file)
+})
+
+const handleEditImage = document.getElementById('edit_image')
+handleEditImage.addEventListener('change', function (e) {
+    const inputTarget = e.target
+    const file = inputTarget.files[0]
+
+    const reader = new FileReader()
     
+    reader.addEventListener('load', function(e) {
+        const readerTarget = e.target
+        handleEditImage.dataset.image = `url(${readerTarget.result})` 
+    })
     reader.readAsDataURL(file)
 })
 
