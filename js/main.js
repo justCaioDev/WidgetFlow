@@ -268,17 +268,26 @@ function saveSettings() {
 
     localStorage.setItem('backgroundColor', colorSelected.dataset.color)
     localStorage.setItem('backgroundColor', image)
+
+    toast('Settings saved successfully!', 'green')
 }
 
 handleSettingsImage.addEventListener('change', function (e) {
     const inputTarget = e.target
     const file = inputTarget.files[0]
+    const fileSize = inputTarget.files[0].size
     const reader = new FileReader()
-    reader.addEventListener('load', function(e) {
-        const readerTarget = e.target
-        handleSettingsImage.dataset.image = `url(${readerTarget.result})` 
-        // saveSettings()
-    })
+
+    if(fileSize > (1024 * 1024 * 2)) {
+        handleSettingsImage.value = ''
+        toast('The selected file is more than 2mb! Please select a lighter file.', 'red')
+        return
+    } else {
+        reader.addEventListener('load', function(e) {
+            const readerTarget = e.target
+            handleSettingsImage.dataset.image = `url(${readerTarget.result})` 
+        })
+    }
     reader.readAsDataURL(file)
 })
 
@@ -376,8 +385,10 @@ function createWidget() {
         })
         
         const image = handleImage.dataset.image
+        const imageSize = handleImage.dataset.image_size
         newWidget.style.backgroundImage = image
         newWidget.dataset.image = image
+        
         
         newWidget.appendChild(newWidget_a)
         newWidget.appendChild(editWidget_btn)
@@ -385,7 +396,10 @@ function createWidget() {
         closeModal(newWidget_modal)
         cleanNewWidgetModal()
         removeClass(newWidget_btn, 'modal_openned')
+        toast('Widget created successfully!', 'green')
+
     } else {
+        toast('Fill in the fields correctly to create the Widget!', 'red')
         return
     }
 }
@@ -517,6 +531,8 @@ function editWidget(widget){
                         localStorage.setItem('widgets', JSON.stringify(editableWidgets)) 
                     }
                 }
+
+                toast('Widget edited successfully!', 'green')
             }
         })
         widget.classList.remove('editing')
@@ -544,13 +560,23 @@ function refreshID(){
 handleImage.addEventListener('change', function (e) {
     const inputTarget = e.target
     const file = inputTarget.files[0]
+    const fileSize = inputTarget.files[0].size
+    
 
     const reader = new FileReader()
     
-    reader.addEventListener('load', function(e) {
-        const readerTarget = e.target
-        handleImage.dataset.image = `url(${readerTarget.result})` 
-    })
+    if(fileSize > (1024 * 1024)) {
+        handleImage.value = ''
+        toast('The selected file is more than 1mb! Please select a lighter file.', 'red')
+        return
+    } else {
+        reader.addEventListener('load', function(e) {
+            const readerTarget = e.target
+            handleImage.dataset.image = `url(${readerTarget.result})` 
+            handleImage.dataset.image_size = fileSize
+        })
+    }
+    
     reader.readAsDataURL(file)
 })
 
@@ -558,13 +584,21 @@ const handleEditImage = document.getElementById('edit_image')
 handleEditImage.addEventListener('change', function (e) {
     const inputTarget = e.target
     const file = inputTarget.files[0]
+    const fileSize = inputTarget.files[0].size
+
 
     const reader = new FileReader()
-    
-    reader.addEventListener('load', function(e) {
-        const readerTarget = e.target
-        handleEditImage.dataset.image = `url(${readerTarget.result})` 
-    })
+
+    if(fileSize > (1024 * 1024)) {
+        handleEditImage.value = ''
+        toast('The selected file is more than 1mb! Please select a lighter file.', 'red')
+        return
+    } else {
+        reader.addEventListener('load', function(e) {
+            const readerTarget = e.target
+            handleEditImage.dataset.image = `url(${readerTarget.result})` 
+        })
+    }
     reader.readAsDataURL(file)
 })
 
@@ -791,7 +825,6 @@ deleteZone.addEventListener('dragleave', () => {
 deleteZone.addEventListener('drop', () => {
     const widgetDragged = document.querySelector('.dragging')
     const lastPosition = document.querySelector('div.last_position')
-    console.log(`Widget deletado!`);
 
     if(localStorage.hasOwnProperty('widgets')){
         widgets = JSON.parse(localStorage.getItem('widgets'))
@@ -804,8 +837,48 @@ deleteZone.addEventListener('drop', () => {
             localStorage.setItem('widgets', JSON.stringify(widgets)) 
         }
     }
-    
     lastPosition.removeChild(widgetDragged)
     deleteZone.classList.remove('delete_over')
-    
+    toast('Widget deleted successfully!', 'green')    
 })
+
+
+function toast(message, color) {
+    const toast = document.createElement('div')
+    const toastMessage = document.createElement('p')
+    const hasToast = document.querySelector('.toast_active')
+
+    toast.classList.add('toast')
+    
+
+    toast.addEventListener('click', ()=> {
+        toast.style.display = 'none'
+    })
+
+    if(hasToast) {
+        bgImage.removeChild(hasToast)
+        toast.classList.add('toast_active')
+        toast.appendChild(toastMessage)
+        bgImage.appendChild(toast)
+    } else {
+        toast.classList.add('toast_active')
+        toast.appendChild(toastMessage)
+        bgImage.appendChild(toast)
+    }
+    
+    if (color == 'green') {
+        toastMessage.innerHTML = `<i class="fa-regular fa-circle-check fa-lg"></i> ${message}`
+        toast.style.boxShadow = '3px 3px 0 #50F296'
+        toastMessage.style.color = '#50F296'
+    } if (color == 'red') {
+        toastMessage.innerHTML = `<i class="fa-solid fa-circle-exclamation fa-lg"></i> ${message}`
+        toast.style.boxShadow = '3px 3px 0 #D92525'
+        toastMessage.style.color = '#D92525'
+    }
+
+    if (toast.style.display !== 'none') {
+        setTimeout(() => {
+            toast.style.display = 'none'
+        }, 6000)
+    }
+}

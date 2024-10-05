@@ -838,3 +838,41 @@ main .size_selected, main .type_selected {
     background-color: var(--transparent-active-state-btn);
 }
 
+@keyframes poptoast {
+    0% {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+main .toast {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    min-width: 200px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    z-index: 999;
+    animation: poptoast .5s ease-in-out forwards;
+    box-shadow: 4px 4px 0 var(--primary-text-color);
+    background-color: rgb(17, 17, 17);
+}
+
+main .toast p {
+    font-weight: 600;
+    text-align: center;
+    padding-inline: 14px;
+}
+
+main .toast i {
+    padding-inline: 4px;
+}
+
