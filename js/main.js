@@ -46,12 +46,8 @@ let largeSize = {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    // const typeSelected = document.querySelector('div.type_selected')
-    // typeSelected.dataset.type = localStorage.getItem('settings_size') 
+    const typeSelected = document.querySelector('.type_selected')
 
-
-    
-    // console.log(typeSelected.dataset.type);
     
     if(localStorage.hasOwnProperty('widgets')) {
         widgets = JSON.parse(localStorage.getItem('widgets'))
@@ -67,11 +63,9 @@ window.addEventListener('DOMContentLoaded', () => {
             editWidget_btn.innerHTML = '<i class="fa-regular fa-pen-to-square fa-sm"></i>'
             existingWidget.style.backgroundColor = widgets[i].widget_color
             existingWidget.dataset.id = widgets[i].widget_id
-            // addClass(editWidget_btn, 'editWidget')
-            // addClass(existingWidget, 'widget')
             existingWidget.classList.add('widget')
             editWidget_btn.classList.add('editWidget')
-            if(widgets[i].widget_title !== '') {
+            if (widgets[i].widget_title !== '') {
                 addClass(existingWidget, 'has_title')
                 existingWidget.dataset.title = widgets[i].widget_title
             } else {
@@ -91,11 +85,10 @@ window.addEventListener('DOMContentLoaded', () => {
             editWidget_btn.addEventListener('click', ()=> {
                 editWidget(existingWidget)
                 existingWidget.classList.add('editing')
-                // addClass(existingWidget, 'editing')
                 editWidget_modal.dataset.id = existingWidget.dataset.id
             })
 
-            if(widgets[i].widget_size == 'small') {
+            if (widgets[i].widget_size == 'small') {
                 existingWidget.style.minWidth = `${smallSize.width}px`
                 existingWidget.style.minHeight = `${smallSize.height}px`
                 existingWidget.style.maxWidth = `${smallSize.width}px`
@@ -116,47 +109,47 @@ window.addEventListener('DOMContentLoaded', () => {
             }
             existingWidget.style.backgroundImage = widgets[i].widget_image
             dropzones.forEach(zoneId => {
-                if(zoneId.dataset.id == existingWidget.dataset.id){
+                if (zoneId.dataset.id == existingWidget.dataset.id){
                     existingWidget.appendChild(existingWidget_a)
                     existingWidget.appendChild(editWidget_btn)
                     zoneId.appendChild(existingWidget)
                 }
             })
         }
-
-        // const allWidgets = document.querySelectorAll('.widget')
-        // const square = document.querySelector("[data-type='square']")
-        // const small = document.querySelector("[data-type='small']")
-        // const medium = document.querySelector("[data-type='medium']")
-
-        // allWidgets.forEach(widget => {
-        //     if(typeSelected.dataset.type == 'square') {
-        //         widget.style.borderRadius = 'var(--none-border-radius)'
-        //     }
-        //     if(typeSelected.dataset.type == 'small') {
-        //         widget.style.borderRadius = 'var(--medium-border-radius)'
-        //     }
-        //     if(typeSelected.dataset.type == 'medium') {
-        //         widget.style.borderRadius = 'var(--large-border-radius)'
-        //     }
-        // })
-
-        // handleTypes.forEach(handleType => {
-        //     handleType.classList.remove('type_selected')  
-        // })
-
-        // if(typeSelected.dataset.type == 'square'){
-        //     square.classList.add('type_selected')
-        // }
-
-        // if(typeSelected.dataset.type == 'small'){
-        //     small.classList.add('type_selected')
-        // }
-
-        // if(typeSelected.dataset.type == 'medium'){
-        //     medium.classList.add('type_selected')
-        // }
         
+        const allWidgets = document.querySelectorAll('.widget')
+
+        if(localStorage.settings_type){
+            typeSelected.classList.remove('type_selected')
+            handleTypes.forEach(handleType => {
+                handleType.classList.remove('type_selected')
+                if (handleType.dataset.type == localStorage.settings_type){
+                    handleType.classList.add('type_selected')
+                }
+            })
+            allWidgets.forEach(widget => {
+                if (localStorage.settings_type == 'square') {
+                    const squareType = document.querySelector("[data-type='square']")
+                    squareType.classList.add('type_selected')
+                    const typeSelected = document.querySelector('.type_selected')
+                    widget.style.borderRadius = 'var(--none-border-radius)'
+                    localStorage.setItem('settings_type', typeSelected.dataset.type)
+                } if (localStorage.settings_type == 'small') {
+                    const smallType = document.querySelector("[data-type='small']")
+                    smallType.classList.add('type_selected')
+                    const typeSelected = document.querySelector('.type_selected')
+                    widget.style.borderRadius = 'var(--medium-border-radius)'
+                    localStorage.setItem('settings_type', typeSelected.dataset.type)
+                } if (localStorage.settings_type == 'medium') {
+                    const mediumType = document.querySelector("[data-type='medium']")
+                    mediumType.classList.add('type_selected')
+                    const typeSelected = document.querySelector('.type_selected')
+                    widget.style.borderRadius = 'var(--large-border-radius)'
+                    localStorage.setItem('settings_type', typeSelected.dataset.type)
+
+                }
+            })
+        }  
     }
 })
 
@@ -248,27 +241,36 @@ function dropWidget() {
 
 function saveSettings() {
     const colorSelected = document.querySelector('div.settigs_color_selected')
-    const typeSelected = document.querySelector('div.type_selected')
+    const typeSelected = document.querySelector('.type_selected')
     const widgets = document.querySelectorAll('.widget')
 
     widgets.forEach(widget => {
         if(typeSelected.dataset.type == 'square') {
+            console.log(`square: ${widget}`);
+            
             widget.style.borderRadius = 'var(--none-border-radius)'
-            localStorage.setItem('settings_size', typeSelected.dataset.type)
-        }
-        if(typeSelected.dataset.type == 'small') {
+            console.log('quadrado');
+            
+            localStorage.setItem('settings_type', typeSelected.dataset.type)
+        } if(typeSelected.dataset.type == 'small') {
+            console.log(`small: ${widget}`);
+
             widget.style.borderRadius = 'var(--medium-border-radius)'
-            localStorage.setItem('settings_size', typeSelected.dataset.type)
-        }
-        if(typeSelected.dataset.type == 'medium') {
+            console.log('redondinho');
+            
+            localStorage.setItem('settings_type', typeSelected.dataset.type)
+        } if(typeSelected.dataset.type == 'medium') {
+            console.log(`medium: ${widget}`);
+
             widget.style.borderRadius = 'var(--large-border-radius)'
-            localStorage.setItem('settings_size', typeSelected.dataset.type)
-        }
+            console.log('redondão');
+
+            localStorage.setItem('settings_type', typeSelected.dataset.type)
+        }       
     })
     const image = handleSettingsImage.dataset.image
     bgImage.style.backgroundImage = image
     bgImage.style.backgroundColor = colorSelected.dataset.color
-    
 }
 
 handleSettingsImage.addEventListener('change', function (e) {
@@ -287,6 +289,7 @@ handleSettingsImage.addEventListener('change', function (e) {
 function createWidget() {
     const colorSelected = document.querySelector('div.color_selected')
     const sizeSelected = document.querySelector('div.size_selected')
+    const typeSelected = document.querySelector('div.type_selected')
 
     
     if(handleLink.value !== '' && colorSelected !== null && sizeSelected !== null) {
@@ -345,6 +348,17 @@ function createWidget() {
             addClass(newWidget, 'has_title')
             newWidget.dataset.title = handleTitle.value
         }
+
+        if (typeSelected.dataset.type == 'square') {
+            newWidget.style.borderRadius = 'var(--none-border-radius)'
+            localStorage.setItem('settings_type', typeSelected.dataset.type)
+        } if (typeSelected.dataset.type == 'small') {
+            newWidget.style.borderRadius = 'var(--medium-border-radius)'
+            localStorage.setItem('settings_type', typeSelected.dataset.type)
+        } if (typeSelected.dataset.type == 'medium') {
+            newWidget.style.borderRadius = 'var(--large-border-radius)'
+            localStorage.setItem('settings_type', typeSelected.dataset.type)
+        }       
 
         newWidget.addEventListener('dragstart', () => {
             dragStart(newWidget)
@@ -489,9 +503,11 @@ function editWidget(widget){
                     widget.dataset.size = 'large'   
                 }
 
-                const image = handleEditImage.dataset.image
-                widget.style.backgroundImage = image
-                widget.dataset.image = image
+                if(handleEditImage.value !== ''){
+                    const image = handleEditImage.dataset.image
+                    widget.style.backgroundImage = image
+                    widget.dataset.image = image
+                }
                 handleEditImage.value = ''
                 handleEditImage.dataset.image = ''
                 
@@ -640,6 +656,7 @@ function selectSize() {
 }
 
 handleTypes.forEach(handleType => {
+    console.log(handleType);
     handleType.addEventListener('click', selectType)
 })
 
@@ -648,6 +665,7 @@ function selectType() {
         removeClass(handleType, 'type_selected')
     })
     addClass(this, 'type_selected')
+    console.log(this);
 }
 
 handleSettingsColors.forEach(handleSettingsColor => {
