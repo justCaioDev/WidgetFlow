@@ -19,6 +19,7 @@ const dropzones_container = document.getElementById('widgethub_grid_container')
 const dropzones = document.querySelectorAll('.widget_dropzone')
 const dropzoneSize = document.querySelector('.dropzone_size')
 const createZone = document.getElementById('create_zone')
+const deleteZone = document.getElementById('delete_zone')
 
 const handleColors = document.querySelectorAll('.color_pick')
 const handleLink = document.getElementById('link')
@@ -48,6 +49,11 @@ let largeSize = {
 window.addEventListener('DOMContentLoaded', () => {
     const typeSelected = document.querySelector('.type_selected')
 
+    
+    if (localStorage.backgroundColor) {
+        bgImage.style.backgroundColor = localStorage.getItem('backgroundColor')
+        bgImage.style.backgroundImage = localStorage.getItem('backgroundColor')
+    }
     
     if(localStorage.hasOwnProperty('widgets')) {
         widgets = JSON.parse(localStorage.getItem('widgets'))
@@ -246,31 +252,22 @@ function saveSettings() {
 
     widgets.forEach(widget => {
         if(typeSelected.dataset.type == 'square') {
-            console.log(`square: ${widget}`);
-            
             widget.style.borderRadius = 'var(--none-border-radius)'
-            console.log('quadrado');
-            
             localStorage.setItem('settings_type', typeSelected.dataset.type)
         } if(typeSelected.dataset.type == 'small') {
-            console.log(`small: ${widget}`);
-
             widget.style.borderRadius = 'var(--medium-border-radius)'
-            console.log('redondinho');
-            
             localStorage.setItem('settings_type', typeSelected.dataset.type)
         } if(typeSelected.dataset.type == 'medium') {
-            console.log(`medium: ${widget}`);
-
             widget.style.borderRadius = 'var(--large-border-radius)'
-            console.log('redondão');
-
             localStorage.setItem('settings_type', typeSelected.dataset.type)
         }       
     })
     const image = handleSettingsImage.dataset.image
     bgImage.style.backgroundImage = image
     bgImage.style.backgroundColor = colorSelected.dataset.color
+
+    localStorage.setItem('backgroundColor', colorSelected.dataset.color)
+    localStorage.setItem('backgroundColor', image)
 }
 
 handleSettingsImage.addEventListener('change', function (e) {
@@ -280,7 +277,7 @@ handleSettingsImage.addEventListener('change', function (e) {
     reader.addEventListener('load', function(e) {
         const readerTarget = e.target
         handleSettingsImage.dataset.image = `url(${readerTarget.result})` 
-        saveSettings()
+        // saveSettings()
     })
     reader.readAsDataURL(file)
 })
@@ -475,7 +472,6 @@ function editWidget(widget){
                 widget.dataset.link = handleEditLink.value
                 widgetEditLink.setAttribute('href', handleEditLink.value)
             
-                console.log(`Este widget foi editado ${editedWidget}`);
                 if(localStorage.hasOwnProperty('widgets')){
                     editableWidgets = JSON.parse(localStorage.getItem('widgets'))
                 }
@@ -656,7 +652,6 @@ function selectSize() {
 }
 
 handleTypes.forEach(handleType => {
-    console.log(handleType);
     handleType.addEventListener('click', selectType)
 })
 
@@ -665,7 +660,6 @@ function selectType() {
         removeClass(handleType, 'type_selected')
     })
     addClass(this, 'type_selected')
-    console.log(this);
 }
 
 handleSettingsColors.forEach(handleSettingsColor => {
@@ -785,3 +779,33 @@ settings_btn.addEventListener('click', () => {
 closeSidebarIcon.addEventListener('click', closeSidebar)
 
 saveSettings_btn.addEventListener('click', saveSettings)
+
+deleteZone.addEventListener('dragover', () => {
+    deleteZone.classList.add('delete_over')
+})
+
+deleteZone.addEventListener('dragleave', () => {
+    deleteZone.classList.remove('delete_over')
+})
+
+deleteZone.addEventListener('drop', () => {
+    const widgetDragged = document.querySelector('.dragging')
+    const lastPosition = document.querySelector('div.last_position')
+    console.log(`Widget deletado!`);
+
+    if(localStorage.hasOwnProperty('widgets')){
+        widgets = JSON.parse(localStorage.getItem('widgets'))
+    }
+    
+    for(i = 0; i < widgets.length; i++) {
+        if(widgets[i].widget_id == widgetDragged.dataset.id){
+            widgets.splice(i, 1)
+
+            localStorage.setItem('widgets', JSON.stringify(widgets)) 
+        }
+    }
+    
+    lastPosition.removeChild(widgetDragged)
+    deleteZone.classList.remove('delete_over')
+    
+})

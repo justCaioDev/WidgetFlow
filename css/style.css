@@ -122,6 +122,27 @@ main .create_zone {
     border-radius: 8px;
 }
 
+main .delete_zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 40px;
+    
+    border-radius: 8px;
+    transition: .3s;
+}
+
+main .delete_zone:hover {
+    cursor: pointer;
+    background-color: var(--transparent-active-state-btn);
+    color: var(--primary-text-hover);
+}
+
+main .delete_over {
+    background-color: rgba(255, 0, 0, 0.8);
+}
+
 main .close_icon {
     display: none;
     position: absolute;
