@@ -199,10 +199,12 @@ window.addEventListener('DOMContentLoaded', () => {
             existingWidget_a.setAttribute('target', '_blank')
             existingWidget_a.dataset.link = widgets[i].widget_link
             existingWidget.dataset.link = widgets[i].widget_link
+            existingWidget.dataset.color = widgets[i].widget_color
+            existingWidget.dataset.image = widgets[i].widget_image
+            existingWidget.dataset.id = widgets[i].widget_id
             const editWidget_btn = document.createElement('button')
             editWidget_btn.innerHTML = '<i class="fa-regular fa-pen-to-square fa-sm"></i>'
             existingWidget.style.backgroundColor = widgets[i].widget_color
-            existingWidget.dataset.id = widgets[i].widget_id
             existingWidget.classList.add('widget')
             editWidget_btn.classList.add('editWidget')
             if (widgets[i].widget_title !== '') {
@@ -460,11 +462,10 @@ handleSettingsImage.addEventListener('change', function (e) {
 
 function createWidget() {
     const colorSelected = document.querySelector('div.color_selected')
+    const textColorSelected = document.querySelector('div.settigs_text_color_selected')
     const sizeSelected = document.querySelector('div.size_selected')
     const typeSelected = document.querySelector('div.type_selected')
     const linksExisting = document.querySelector("[data-link]")
-    const defaultColor = document.querySelector("[data-color='#363636']")
-    const defaultSize = document.querySelector("[data-size='medium']")
     const borderSelected = document.querySelector('div.border_selected')
 
     
@@ -487,7 +488,7 @@ function createWidget() {
         newWidget_a.setAttribute('target', '_blank')
         newWidget.style.backgroundColor = colorSelected.dataset.color
         newWidget.style.boxShadow = `3px 4px 0 ${localStorage.border}`
-        newWidget.dataset.color = colorSelected.dataset.color
+        newWidget.dataset.color = textColorSelected.dataset.text_color
         addClass(newWidget, 'widget')
 
         if(localStorage.hasOwnProperty('widgets')){
@@ -572,8 +573,6 @@ function createWidget() {
         createZone.appendChild(newWidget)
         closeModal(newWidget_modal)
         cleanNewWidgetModal()
-        addClass(defaultColor, 'color_selected')
-        addClass(defaultSize, 'size_selected')
         removeClass(newWidget_btn, 'modal_openned')
         toast('Widget created successfully!', 'green')
 
@@ -595,22 +594,28 @@ function editWidget(widget){
 
     widget.classList.add('editing')
 
+    const editingWidget = document.querySelector('.editing')
+
     handleEditLink.value = widget.dataset.link
 
     handleEditColors.forEach(handleEditColor => {
-        handleEditColor.addEventListener('click', selectColor)
+        handleEditColor.addEventListener('click', () => {
+            handleEditColors.forEach(handleEditColor => {
+                handleEditColor.classList.remove('color_selected')
+            })
+            handleEditColor.classList.add('color_selected')
+        })
         handleEditColor.style.backgroundColor = handleEditColor.dataset.color
     })
     
-    function selectColor() {
-        handleEditColors.forEach(handleEditColor => {
-            // removeClass(handleEditColor, 'color_selected')
-            handleEditColor.classList.remove('color_selected')
-
-        })
-        // addClass(this, 'color_selected')
-        this.classList.add('color_selected')
-    }
+    handleEditColors.forEach(isColor => {
+        isColor.classList.remove('color_selected')
+        if(editingWidget && isColor.dataset.color == editingWidget.dataset.color) {
+            console.log('alouu');
+            
+            isColor.classList.add('color_selected')
+        }   
+    })
     
     handleEditSizes.forEach(handleEditSize => {
         handleEditSize.addEventListener('click', selectSize)
@@ -787,17 +792,22 @@ handleEditImage.addEventListener('change', function (e) {
 function cleanNewWidgetModal() {
     handleColors.forEach(handleColor => {
         removeClass(handleColor, 'color_selected')
+        if (handleColor.dataset.color === '#363636') {
+            handleColor.classList.add('color_selected')
+        }
     })
-
+    
     handleSizes.forEach(handleSize => {
         removeClass(handleSize, 'size_selected')
+        if (handleSize.dataset.size === 'medium') {
+            handleSize.classList.add('size_selected')
+        }
     })
 
     handleLink.value = ''
     handleTitle.value = ''
     handleImage.value = ''
     handleImage.dataset.image = ''
-
 }
 
 function dragStart(widget) {
