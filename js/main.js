@@ -35,7 +35,7 @@ const handleBorders = document.querySelectorAll('.border_color')
 const root = document.querySelector(':root')
 const rootStyles = getComputedStyle(root)
 
-
+let isFirstTime = false
 
 let smallSize = {
     width: dropzoneSize.clientWidth,
@@ -53,6 +53,8 @@ let largeSize = {
 }
 
 function refreshSizesDefault() {
+    const widgetsSizes = document.querySelectorAll('.widget')
+    
     smallSize = {
         width: dropzoneSize.clientWidth,
         height: dropzoneSize.clientHeight
@@ -67,6 +69,29 @@ function refreshSizesDefault() {
         width: (dropzoneSize.clientWidth * 3) + (14 * 2),
         height: (dropzoneSize.clientHeight * 3) + (26 * 2)
     }
+
+    widgetsSizes.forEach(widgetSizes => {
+        if (widgetSizes.widget_size == 'small') {
+            widgetSizes.style.minWidth = `${smallSize.width}px`
+            widgetSizes.style.minHeight = `${smallSize.height}px`
+            widgetSizes.style.maxWidth = `${smallSize.width}px`
+            widgetSizes.style.maxHeight = `${smallSize.height}px`
+            widgetSizes.dataset.size = 'small'   
+        } if (widgetSizes.widget_size == 'medium') {
+            widgetSizes.style.maxWidth = `none`
+            widgetSizes.style.maxHeight = `none`
+            widgetSizes.style.minWidth = `${mediumSize.width}px`
+            widgetSizes.style.minHeight = `${mediumSize.height}px`
+            widgetSizes.dataset.size = 'medium'   
+        } if (widgetSizes.widget_size == 'large') {
+            widgetSizes.style.maxWidth = `none`
+            widgetSizes.style.maxHeight = `none`
+            widgetSizes.style.minWidth = `${largeSize.width}px`
+            widgetSizes.style.minHeight = `${largeSize.height}px`
+            widgetSizes.dataset.size = 'large'   
+        }
+    })
+    
 }
 
 refreshSizesDefault()
@@ -116,7 +141,8 @@ function dropWidget() {
     const newPosition = this
     const hasWidget = newPosition.querySelector('div.widget')
     const widgetDragged = document.querySelector('div.dragging')
-
+    refreshSizesDefault()
+    
     if(hasWidget !== null){
         const lastPosition = document.querySelector('div.last_position')
         lastPosition.appendChild(hasWidget)
@@ -397,6 +423,9 @@ function createWidget() {
     const sizeSelected = document.querySelector('div.size_selected')
     const typeSelected = document.querySelector('div.type_selected')
     const linksExisting = document.querySelector("[data-link]")
+    const defaultColor = document.querySelector("[data-color='#363636']")
+    const defaultSize = document.querySelector("[data-size='medium']")
+    const borderSelected = document.querySelector('div.border_selected')
 
     
     if(handleLink.value !== '' && colorSelected !== null && sizeSelected !== null) {
@@ -417,6 +446,7 @@ function createWidget() {
         newWidget_a.setAttribute('href', handleLink.value)
         newWidget_a.setAttribute('target', '_blank')
         newWidget.style.backgroundColor = colorSelected.dataset.color
+        newWidget.style.boxShadow = `3px 4px 0 ${localStorage.border}`
         newWidget.dataset.color = colorSelected.dataset.color
         addClass(newWidget, 'widget')
 
@@ -502,6 +532,8 @@ function createWidget() {
         createZone.appendChild(newWidget)
         closeModal(newWidget_modal)
         cleanNewWidgetModal()
+        addClass(defaultColor, 'color_selected')
+        addClass(defaultSize, 'size_selected')
         removeClass(newWidget_btn, 'modal_openned')
         toast('Widget created successfully!', 'green')
 
