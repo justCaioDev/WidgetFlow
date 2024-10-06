@@ -202,6 +202,7 @@ window.addEventListener('DOMContentLoaded', () => {
             existingWidget.dataset.color = widgets[i].widget_color
             existingWidget.dataset.image = widgets[i].widget_image
             existingWidget.dataset.id = widgets[i].widget_id
+            existingWidget.dataset.widget_text_color = widgets[i].widget_text_color
             const editWidget_btn = document.createElement('button')
             editWidget_btn.innerHTML = '<i class="fa-regular fa-pen-to-square fa-sm"></i>'
             existingWidget.style.backgroundColor = widgets[i].widget_color
@@ -324,7 +325,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
                 }
             })
-        }  
+        }  else {
+            return
+        }
     }
 })
 
@@ -410,11 +413,12 @@ function saveSettings() {
     const typeSelected = document.querySelector('.type_selected')
     const textColorSelected = document.querySelector('div.settigs_text_color_selected')
     const borderSelected = document.querySelector('div.border_selected')
-    const widgets = document.querySelectorAll('.widget')
-
+    const widgets = document.querySelectorAll('div.widget')
+     
     widgets.forEach(widget => {
         widget.style.boxShadow = `3px 4px ${borderSelected.dataset.border}`
         localStorage.setItem('border', borderSelected.dataset.border)
+        
         
         widget.style.color = textColorSelected.dataset.text_color
         localStorage.setItem('text_color', textColorSelected.dataset.text_color)
@@ -430,6 +434,10 @@ function saveSettings() {
             localStorage.setItem('settings_type', typeSelected.dataset.type)
         }       
     })
+    localStorage.setItem('settings_type', typeSelected.dataset.type)
+    localStorage.setItem('border', borderSelected.dataset.border)
+    localStorage.setItem('text_color', textColorSelected.dataset.text_color)
+
     const image = handleSettingsImage.dataset.image
     bgImage.style.backgroundImage = image
     bgImage.style.backgroundColor = colorSelected.dataset.color
@@ -462,7 +470,7 @@ handleSettingsImage.addEventListener('change', function (e) {
 
 function createWidget() {
     const colorSelected = document.querySelector('div.color_selected')
-    const textColorSelected = document.querySelector('div.settigs_text_color_selected')
+    const textColorSelected = document.querySelector('.settigs_text_color_selected')
     const sizeSelected = document.querySelector('div.size_selected')
     const typeSelected = document.querySelector('div.type_selected')
     const linksExisting = document.querySelector("[data-link]")
@@ -488,7 +496,10 @@ function createWidget() {
         newWidget_a.setAttribute('target', '_blank')
         newWidget.style.backgroundColor = colorSelected.dataset.color
         newWidget.style.boxShadow = `3px 4px 0 ${localStorage.border}`
-        newWidget.dataset.color = textColorSelected.dataset.text_color
+        console.log(textColorSelected);
+        newWidget.dataset.widget_text_color = textColorSelected.dataset.text_color
+        
+        newWidget.dataset.color = colorSelected.dataset.color
         addClass(newWidget, 'widget')
 
         if(localStorage.hasOwnProperty('widgets')){
@@ -498,7 +509,8 @@ function createWidget() {
         widgets.push({widget_link: handleLink.value,
                     widget_title: handleTitle.value,
                     widget_size: sizeSelected.dataset.size, 
-                    widget_color: colorSelected.dataset.color, 
+                    widget_color: colorSelected.dataset.color,
+                    widget_text_color: newWidget.dataset.widget_text_color, 
                     widget_image: handleImage.dataset.image,
                     widget_id: 0 
                 })
