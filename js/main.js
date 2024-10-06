@@ -147,7 +147,21 @@ function dropWidget() {
         const lastPosition = document.querySelector('div.last_position')
         lastPosition.appendChild(hasWidget)
         hasWidget.dataset.id = lastPosition.dataset.id
+        console.log('saiu do lugar' + hasWidget.dataset.id);
+        
         widgetDragged.dataset.id = newPosition.dataset.id
+        console.log('entrou no lugar' + widgetDragged.dataset.id);
+        
+        if(localStorage.hasOwnProperty('widgets')) {
+            widgets = JSON.parse(localStorage.getItem('widgets'))
+
+            for (i = 0; i < widgets.length; i++) {
+                if (widgets[i].widget_link == hasWidget.dataset.link) {
+                    widgets[i].widget_id = hasWidget.dataset.id
+                }
+            }
+        }
+        localStorage.setItem('widgets', JSON.stringify(widgets))  
         localStorage.setItem('widget_id', widgetDragged.dataset.id)
         this.appendChild(widgetDragged)
     } else {
@@ -162,6 +176,9 @@ function dropWidget() {
 
 window.addEventListener('DOMContentLoaded', () => {
     const typeSelected = document.querySelector('.type_selected')
+    const borderSelected = document.querySelector('.border_selected')
+    const backgroundColorSelected = document.querySelector('.settigs_color_selected')
+    const textColorSelected = document.querySelector('.settigs_text_color_selected')
 
     refreshSizesDefault()
     createZones()
@@ -244,14 +261,37 @@ window.addEventListener('DOMContentLoaded', () => {
         
         const allWidgets = document.querySelectorAll('.widget')
 
-        if(localStorage.settings_type){
+        if(localStorage.settings_type || localStorage.border || localStorage.text_color){
             typeSelected.classList.remove('type_selected')
+            borderSelected.classList.remove('border_selected')
+            textColorSelected.classList.remove('settigs_text_color_selected')
+            backgroundColorSelected.classList.remove('settigs_color_selected')
+
             handleTypes.forEach(handleType => {
                 handleType.classList.remove('type_selected')
                 if (handleType.dataset.type == localStorage.settings_type){
                     handleType.classList.add('type_selected')
                 }
             })
+
+            handleBorders.forEach(handleBorder => {
+                if (handleBorder.dataset.border == localStorage.border){
+                    handleBorder.classList.add('border_selected')
+                }
+            })
+
+            handleTextColors.forEach(handleTextColor => {
+                if (handleTextColor.dataset.text_color == localStorage.text_color){
+                    handleTextColor.classList.add('settigs_text_color_selected')
+                }
+            })
+
+            handleSettingsColors.forEach(handleSettingsColor => {
+                if (handleSettingsColor.dataset.color == localStorage.backgroundColor){
+                    handleSettingsColor.classList.add('settigs_color_selected')
+                }
+            })
+
             allWidgets.forEach(widget => {
                 if (localStorage.text_color) {
                     widget.style.color = localStorage.text_color
