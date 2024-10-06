@@ -28,6 +28,8 @@ const handleTitle = document.getElementById('title')
 const handleTypes = document.querySelectorAll('.type_box')
 const handleSettingsColors = document.querySelectorAll('.settings_color')
 const handleSettingsImage = document.getElementById('settings_image')
+const handleTextColors = document.querySelectorAll('.text_color')
+const handleBorders = document.querySelectorAll('.border_color')
 
 
 const root = document.querySelector(':root')
@@ -225,6 +227,14 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             })
             allWidgets.forEach(widget => {
+                if (localStorage.text_color) {
+                    widget.style.color = localStorage.text_color
+                }
+                
+                if (localStorage.border) {
+                    widget.style.boxShadow = `3px 4px ${localStorage.border}`
+                }
+
                 if (localStorage.settings_type == 'square') {
                     const squareType = document.querySelector("[data-type='square']")
                     squareType.classList.add('type_selected')
@@ -330,9 +340,17 @@ document.addEventListener('dragover', (e) => e.preventDefault())
 function saveSettings() {
     const colorSelected = document.querySelector('div.settigs_color_selected')
     const typeSelected = document.querySelector('.type_selected')
+    const textColorSelected = document.querySelector('div.settigs_text_color_selected')
+    const borderSelected = document.querySelector('div.border_selected')
     const widgets = document.querySelectorAll('.widget')
 
     widgets.forEach(widget => {
+        widget.style.boxShadow = `3px 4px ${borderSelected.dataset.border}`
+        localStorage.setItem('border', borderSelected.dataset.border)
+        
+        widget.style.color = textColorSelected.dataset.text_color
+        localStorage.setItem('text_color', textColorSelected.dataset.text_color)
+        
         if(typeSelected.dataset.type == 'square') {
             widget.style.borderRadius = 'var(--none-border-radius)'
             localStorage.setItem('settings_type', typeSelected.dataset.type)
@@ -378,9 +396,15 @@ function createWidget() {
     const colorSelected = document.querySelector('div.color_selected')
     const sizeSelected = document.querySelector('div.size_selected')
     const typeSelected = document.querySelector('div.type_selected')
+    const linksExisting = document.querySelector("[data-link]")
 
     
     if(handleLink.value !== '' && colorSelected !== null && sizeSelected !== null) {
+        if(linksExisting && handleLink.value == linksExisting.dataset.link) {
+            toast('The link provided already exists in another Widget!', 'red')
+            return
+        }
+        
         let widgets = new Array()
         const newWidget = document.createElement('div')
         const newWidget_a = document.createElement('a')
@@ -395,7 +419,6 @@ function createWidget() {
         newWidget.style.backgroundColor = colorSelected.dataset.color
         newWidget.dataset.color = colorSelected.dataset.color
         addClass(newWidget, 'widget')
-
 
         if(localStorage.hasOwnProperty('widgets')){
             widgets = JSON.parse(localStorage.getItem('widgets'))
@@ -733,6 +756,30 @@ function dragEnd(widget) {
 function dragWidget(widget) {
     addClass(widget, 'dragging')
     closeSidebar()
+}
+
+handleBorders.forEach(handleBorder => {
+    handleBorder.addEventListener('click', selectBorder)
+    handleBorder.style.boxShadow = `2px 3px 0 ${handleBorder.dataset.border}`
+})
+
+function selectBorder() {
+    handleBorders.forEach(handleBorder => {
+        removeClass(handleBorder, 'border_selected')
+    })
+    addClass(this, 'border_selected')
+}
+
+handleTextColors.forEach(handleTextColor => {
+    handleTextColor.addEventListener('click', selectTextColor)
+    handleTextColor.style.backgroundColor = handleTextColor.dataset.text_color
+})
+
+function selectTextColor() {
+    handleTextColors.forEach(handleTextColor => {
+        removeClass(handleTextColor, 'settigs_text_color_selected')
+    })
+    addClass(this, 'settigs_text_color_selected')
 }
 
 handleColors.forEach(handleColor => {

@@ -46,12 +46,10 @@
 }
 
 body {
-   
-
     font-family: 'Alexandria';
     width: 100%;
     height: 100vh;
-    background-color: var(--dark-main-bg);
+    background-color: #2e2e2e;
     color: var(--primary-text-color);
 
 }
@@ -382,7 +380,7 @@ main .new_widget_modal {
 }
 
 .new_widget_modal .or {
-    padding-left: 8px;
+    text-align: center;
 }
 
 .new_widget_modal .optional {
@@ -496,8 +494,8 @@ main .settings_modal {
     justify-content: center;
     gap: 8px;
     width: 100%;
-    padding: 14px;
-    margin-bottom: 12px;
+    padding: 10px;
+    margin-bottom: 8px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -511,14 +509,14 @@ main .settings_modal {
     background-color: var(--active-state-btn-bg);
 }
 
-.settings_modal .background_color, .widget_type {
+.settings_modal .background_color, .widget_type, .settings_text_color, .settings_border {
     display: flex;
     align-items: start;
     flex-direction: column;
     width: 100%;
     border-radius: 4px;
-    margin-bottom: 12px;
-    padding: 6px 12px;
+    margin-bottom: 8px;
+    padding: 2px 8px;
     background-color: var(--active-state-btn-bg);
 }
 
@@ -526,19 +524,20 @@ main .settings_modal {
     margin-bottom: 4px;
 }
 
-.settings_modal .colors {
-    display: flex;
-    align-items: center;
+.settings_modal .colors, .text_colors {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    grid-template-rows: repeat(2, auto);
     padding: 8px;
-    gap: 12px;
+    gap: 8px;
 }
 
-.settings_modal .settings_color {
-    width: 60px;
-    height: 60px;
+.settings_modal .settings_color, .text_color {
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    background-color: #BFBDBA;
     cursor: pointer;
+    border: 2px solid white;
 }
 
 .settings_modal .image {
@@ -565,8 +564,8 @@ main .settings_modal {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 60px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     transition: .3s;
 }
@@ -577,26 +576,31 @@ main .settings_modal {
 }
 
 .settings_modal .square {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     border: 2px solid var(--primary-text-color);
 }
 
 .settings_modal .small_rounded {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     border-radius: 4px;
     border: 2px solid var(--primary-text-color);
 }
 
 .settings_modal .medium_rounded {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     border-radius: 8px;
     border: 2px solid var(--primary-text-color);
 }
 
+
 .types p {
+    text-align: center;
+}
+.settings_modal .or, .edit_widget_modal .or {
+    margin: auto;
     text-align: center;
 }
 
@@ -606,10 +610,11 @@ main .widget {
     top: 0;
     width: 100%;
     height: 100%;
+    font-weight: 500;
     text-align: center;
     z-index: 98;
     transition: .3s ease-in-out;
-    color: var(--primary-text-color);
+    color: #d1d1d1;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -626,6 +631,7 @@ main .widget:hover {
     display: flex;
     width: 100%;
     height: 100%;
+    margin-bottom: 4px;
     text-decoration: none;
     cursor: pointer;
 }
@@ -650,9 +656,9 @@ main .has_title::after {
     content: attr(data-title);
 }
 
-main .settigs_color_selected {
-    border: 2px solid white;
-    scale: 105%;
+main .settigs_color_selected, main .settigs_text_color_selected {
+    border: 2px solid #50f296 !important;
+    scale: 108%;
 }
 
 main .right .widget {
@@ -766,10 +772,23 @@ main .edit_widget_modal {
     margin-top: 4px;
 }
 
-.edit_widget_modal .edit_colors_option {
+.edit_widget_modal .edit_colors_option, main .settings_modal .border_colors {
     display: grid;
     grid-template-columns: repeat(7, auto);
+    padding-block: 8px;
     gap: 8px;
+}
+
+main .settings_modal .border_color {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: rgba(163, 163, 163, 0.138);
+}
+
+main .settings_modal .border_selected {
+    background-color: rgba(255, 255, 255, 0.25);
 }
 
 .edit_widget_modal .edit_color_pick {
@@ -840,7 +859,7 @@ main .edit_widget_modal {
 main .modal_open {
     scale: 100%;
     opacity: 1;
-    padding: 24px 8px;
+    padding: 12px 8px;
 }
 
 main .selected {
@@ -884,6 +903,7 @@ main .toast p {
 main .toast i {
     padding-inline: 4px;
 }
+
 
 @media screen and (max-width: 1080px) {
     main {
