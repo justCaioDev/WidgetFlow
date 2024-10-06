@@ -29,14 +29,31 @@
     --none-border-radius: 0px;
     --medium-border-radius: 8px;
     --large-border-radius: 14px;
+
+    --columns: 15;
+    --rows: 9;
+}
+
+@keyframes poptoast {
+    0% {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 body {
+   
+
     font-family: 'Alexandria';
     width: 100%;
     height: 100vh;
     background-color: var(--dark-main-bg);
     color: var(--primary-text-color);
+
 }
 
 p, button {
@@ -60,23 +77,24 @@ i {
 main {
     width: 100%;
     height: 100%;
-    padding: 28px;
+    padding: 34px 34px 34px 68px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    background-attachment: fixed;
 }
 
 main .widgethub_grid_container {
     display: grid;
-    grid-template-columns: repeat(15, 1fr);
-    grid-template-rows: repeat(9, 1fr);
+    grid-template-columns: repeat(var(--columns), 1fr);
+    grid-template-rows: repeat(var(--rows), 1fr);
     column-gap: 14px;
     row-gap: 26px;
     width: 100%;
     max-width: 1280px;
     height: 100%;
-    margin-left: 64px;
     transition: .4s;
+    margin: auto;
     border-radius: var(--border-radius);
 }
 
@@ -105,6 +123,7 @@ main .sidebar_nav {
 
     width: 64px;
     height: 100%;
+    max-height: 100vh;
     
     padding: 24px 8px;
     border-radius: 0 8px 8px 0;
@@ -838,16 +857,6 @@ main .size_selected, main .type_selected {
     background-color: var(--transparent-active-state-btn);
 }
 
-@keyframes poptoast {
-    0% {
-        opacity: 0;
-        transform: translateY(14px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
 main .toast {
     display: flex;
@@ -874,5 +883,32 @@ main .toast p {
 
 main .toast i {
     padding-inline: 4px;
+}
+
+@media screen and (max-width: 1080px) {
+    main {
+        padding: 34px 34px 34px 72px;
+    }
+    main .widgethub_grid_container {
+        max-width: 960px;
+    }
+    
+    main .widget {
+        font-size: 0.875rem;
+    }
+}
+
+@media screen and (max-width: 720px) {
+    main .add_clock_modal, main .new_widget_modal, main .settings_modal {
+        left: 220px;
+        scale: 70%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    main .add_clock_modal, main .new_widget_modal, main .settings_modal {
+        left: 200px;
+        scale: 65%;
+    }
 }
 

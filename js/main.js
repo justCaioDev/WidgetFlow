@@ -16,7 +16,6 @@ const editWidget_modal = document.getElementById('edit_widget_modal')
 
 const bgImage = document.getElementById('main_container')
 const dropzones_container = document.getElementById('widgethub_grid_container')
-const dropzones = document.querySelectorAll('.widget_dropzone')
 const dropzoneSize = document.querySelector('.dropzone_size')
 const createZone = document.getElementById('create_zone')
 const deleteZone = document.getElementById('delete_zone')
@@ -29,6 +28,11 @@ const handleTitle = document.getElementById('title')
 const handleTypes = document.querySelectorAll('.type_box')
 const handleSettingsColors = document.querySelectorAll('.settings_color')
 const handleSettingsImage = document.getElementById('settings_image')
+
+
+const root = document.querySelector(':root')
+const rootStyles = getComputedStyle(root)
+
 
 
 let smallSize = {
@@ -46,13 +50,98 @@ let largeSize = {
     height: (dropzoneSize.clientHeight * 3) + (26 * 2)
 }
 
+function refreshSizesDefault() {
+    smallSize = {
+        width: dropzoneSize.clientWidth,
+        height: dropzoneSize.clientHeight
+    }
+    
+    mediumSize = {
+        width:  (dropzoneSize.clientWidth * 2) + 14,
+        height: (dropzoneSize.clientHeight * 2) + 26
+    }
+    
+    largeSize = {
+        width: (dropzoneSize.clientWidth * 3) + (14 * 2),
+        height: (dropzoneSize.clientHeight * 3) + (26 * 2)
+    }
+}
+
+refreshSizesDefault()
+adjustScreen()
+
+function createZones() {
+    const dropzonesExisting = document.querySelectorAll('.widget_dropzone')
+    const colums = rootStyles.getPropertyValue('--columns')
+    const rows = rootStyles.getPropertyValue('--rows')
+    
+    const totalDropzonesAvailable = colums * rows
+    
+    if (dropzonesExisting.length < totalDropzonesAvailable) {
+        const isLeft = totalDropzonesAvailable - dropzonesExisting.length
+        for(i = 0; i < isLeft; i++) {
+            const dropzoneWillExist = document.createElement('div')
+            dropzoneWillExist.dataset.id = dropzonesExisting.length + i + 1
+            dropzoneWillExist.classList.add('widget_dropzone')
+            dropzones_container.appendChild(dropzoneWillExist)
+        }
+    }
+}
+
+createZones()
+
+const dropzones = document.querySelectorAll('.widget_dropzone')
+
+dropzones.forEach(dropzone => {
+    dropzone.addEventListener('dragleave', dragLeave)
+    dropzone.addEventListener('dragover', dragOver)
+    dropzone.addEventListener('drop', dropWidget)
+
+    dropzone.style.minWidth = `${dropzoneSize.clientWidth}`
+    dropzone.style.minHeight = `${dropzoneSize.clientHeight}`
+
+})
+
+function dragLeave() {
+    removeClass(this, 'dropzone_over')
+}
+
+function dragOver() {
+    addClass(this, 'dropzone_over')
+}
+
+function dropWidget() {
+    const newPosition = this
+    const hasWidget = newPosition.querySelector('div.widget')
+    const widgetDragged = document.querySelector('div.dragging')
+
+    if(hasWidget !== null){
+        const lastPosition = document.querySelector('div.last_position')
+        lastPosition.appendChild(hasWidget)
+        hasWidget.dataset.id = lastPosition.dataset.id
+        widgetDragged.dataset.id = newPosition.dataset.id
+        localStorage.setItem('widget_id', widgetDragged.dataset.id)
+        this.appendChild(widgetDragged)
+    } else {
+        widgetDragged.dataset.id = this.dataset.id
+        // editWidget_modal.dataset.id = this.dataset.id
+        localStorage.setItem('widget_id', widgetDragged.dataset.id)
+        this.appendChild(widgetDragged)
+    }
+    refreshID()
+}
+
+
 window.addEventListener('DOMContentLoaded', () => {
     const typeSelected = document.querySelector('.type_selected')
 
+    refreshSizesDefault()
+    createZones()
+    adjustScreen()
     
     if (localStorage.backgroundColor) {
         bgImage.style.backgroundColor = localStorage.getItem('backgroundColor')
-        bgImage.style.backgroundImage = localStorage.getItem('backgroundColor')
+        bgImage.style.backgroundImage = localStorage.getItem('backgroundImage')
     }
     
     if(localStorage.hasOwnProperty('widgets')) {
@@ -93,6 +182,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 existingWidget.classList.add('editing')
                 editWidget_modal.dataset.id = existingWidget.dataset.id
             })
+
+            // refreshSizesDefault()
 
             if (widgets[i].widget_size == 'small') {
                 existingWidget.style.minWidth = `${smallSize.width}px`
@@ -159,21 +250,55 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 })
 
+function adjustScreen() {
+    if (window.matchMedia("(max-width:960px)").matches) {
+        const rightZones = document.querySelectorAll("[data-id='11'], [data-id='23'], [data-id='35'], [data-id='47'], [data-id='59'], [data-id='71'], [data-id='83'], [data-id='95'], [data-id='107'], [data-id='119'], [data-id='131'], [data-id='143'], [data-id='12'], [data-id='24'], [data-id='36'], [data-id='48'], [data-id='60'], [data-id='72'], [data-id='84'], [data-id='96'], [data-id='108'], [data-id='120'], [data-id='132'], [data-id='144']")
+
+        const bottomZones = document.querySelectorAll("[data-id='121'], [data-id='122'], [data-id='123'], [data-id='124'], [data-id='125'], [data-id='126'], [data-id='127'], [data-id='128'], [data-id='129'], [data-id='130'], [data-id='131'], [data-id='132'], [data-id='133'], [data-id='134'], [data-id='135'], [data-id='136'], [data-id='137'], [data-id='138'], [data-id='139'], [data-id='140'], [data-id='141'], [data-id='142'], [data-id='143'], [data-id='144']")
+        
+        rightZones.forEach(rightZone => {
+            rightZone.classList.add('right')
+        })
+
+        bottomZones.forEach(bottomZone => {
+            bottomZone.classList.add('bottom')
+        })
+        
+        root.style.setProperty('--columns', 12)
+        root.style.setProperty('--rows', 12)
+    } else {
+        const rightZones = document.querySelectorAll("[data-id='135'], [data-id='134'], [data-id='120'], [data-id='119'], [data-id='104'], [data-id='105'], [data-id='90'], [data-id='89'], [data-id='75'], [data-id='74'], [data-id='59'], [data-id='60'], [data-id='44'], [data-id='45'], [data-id='29'], [data-id='30'], [data-id='14'], [data-id='15']")
+
+        const bottomZones = document.querySelectorAll("[data-id='135'], [data-id='134'], [data-id='133'], [data-id='132'], [data-id='131'], [data-id='130'], [data-id='129'], [data-id='128'], [data-id='127'], [data-id='126'], [data-id='125'], [data-id='124'], [data-id='123'], [data-id='122'], [data-id='121'], [data-id='120'], [data-id='119'], [data-id='118'], [data-id='117'], [data-id='116'], [data-id='115'], [data-id='114'], [data-id='113'], [data-id='112'], [data-id='111'], [data-id='110'], [data-id='109'], [data-id='108'], [data-id='107'], [data-id='106']")
+
+        rightZones.forEach(rightZone => {
+            rightZone.classList.add('right')
+        })
+
+        bottomZones.forEach(bottomZone => {
+            bottomZone.classList.add('bottom')
+        })
+
+        root.style.setProperty('--columns', 15)
+        root.style.setProperty('--rows', 9)
+    }
+
+}
 
 window.addEventListener('resize', ()=> {
     const widgets = document.querySelectorAll('div.widget')
-    let smallSize = {
-        width: dropzoneSize.clientWidth,
-        height: dropzoneSize.clientHeight
-    }
-    let mediumSize = {
-        width:  (dropzoneSize.clientWidth * 2) + 14,
-        height: (dropzoneSize.clientHeight * 2) + 26
-    }
-    let largeSize = {
-        width: (dropzoneSize.clientWidth * 3) + (14 * 2),
-        height: (dropzoneSize.clientHeight * 3) + (26 * 2)
-    }
+    
+    refreshSizesDefault()
+
+    const removeRights = document.querySelectorAll('.widget_dropzone')
+    removeRights.forEach(removeRight => {
+        removeRight.classList.remove('right')
+        removeRight.classList.remove('bottom')
+    })
+
+    adjustScreen()
+    createZones()
+            
     widgets.forEach(widget => {
         if(widget.dataset.size == 'small') {
             widget.style.minWidth = `${smallSize.width}px`
@@ -200,50 +325,7 @@ closeEditWidget_modal.addEventListener('click', ()=> {
 
 document.addEventListener('dragover', (e) => e.preventDefault())
 
-dropzones.forEach(dropzone => {
-    dropzone.addEventListener('dragenter', dragEnter)
-    dropzone.addEventListener('dragleave', dragLeave)
-    dropzone.addEventListener('dragover', dragOver)
-    dropzone.addEventListener('drop', dropWidget)
 
-    dropzone.style.minWidth = `${dropzoneSize.clientWidth}`
-    dropzone.style.minHeight = `${dropzoneSize.clientHeight}`
-
-})
-
-function dragEnter() {
-    
-}
-
-function dragLeave() {
-    removeClass(this, 'dropzone_over')
-
-}
-
-function dragOver() {
-    addClass(this, 'dropzone_over')
-}
-
-function dropWidget() {
-    const newPosition = this
-    const hasWidget = newPosition.querySelector('div.widget')
-    const widgetDragged = document.querySelector('div.dragging')
-
-    if(hasWidget !== null){
-        const lastPosition = document.querySelector('div.last_position')
-        lastPosition.appendChild(hasWidget)
-        hasWidget.dataset.id = lastPosition.dataset.id
-        widgetDragged.dataset.id = newPosition.dataset.id
-        localStorage.setItem('widget_id', widgetDragged.dataset.id)
-        this.appendChild(widgetDragged)
-    } else {
-        widgetDragged.dataset.id = this.dataset.id
-        // editWidget_modal.dataset.id = this.dataset.id
-        localStorage.setItem('widget_id', widgetDragged.dataset.id)
-        this.appendChild(widgetDragged)
-    }
-    refreshID()
-}
 
 function saveSettings() {
     const colorSelected = document.querySelector('div.settigs_color_selected')
@@ -267,7 +349,7 @@ function saveSettings() {
     bgImage.style.backgroundColor = colorSelected.dataset.color
 
     localStorage.setItem('backgroundColor', colorSelected.dataset.color)
-    localStorage.setItem('backgroundColor', image)
+    localStorage.setItem('backgroundImage', image)
 
     toast('Settings saved successfully!', 'green')
 }
@@ -329,6 +411,8 @@ function createWidget() {
 
 
         localStorage.setItem('widgets', JSON.stringify(widgets))  
+
+        refreshSizesDefault()
 
         if(sizeSelected.dataset.size == 'small') {
             newWidget.style.minWidth = `${smallSize.width}px`
@@ -411,6 +495,8 @@ function editWidget(widget){
     const handleEditSizes = document.querySelectorAll('.edit_size_pick')
     const handleEditTitle = document.getElementById('edit_title') 
     const widgetEditLink = widget.querySelector('a')
+
+    refreshSizesDefault()
 
     widget.classList.add('editing')
 
@@ -640,20 +726,7 @@ function dragEnd(widget) {
         removeClass(dropzone, 'dropzone_over')
     })  
 
-    let smallSize = {
-        width: dropzoneSize.clientWidth,
-        height: dropzoneSize.clientHeight
-    }
-    
-    let mediumSize = {
-        width:  (dropzoneSize.clientWidth * 2) + 14,
-        height: (dropzoneSize.clientHeight * 2) + 26
-    }
-    
-    let largeSize = {
-        width: (dropzoneSize.clientWidth * 3) + (14 * 2),
-        height: (dropzoneSize.clientHeight * 3) + (26 * 2)
-    }
+    refreshSizesDefault()
  
 }
 
