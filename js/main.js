@@ -3,6 +3,7 @@ const openSidebar_btn = document.getElementById('sidebar_logo')
 const sidebarLogo = document.querySelector('.sidebar_logo')
 const newWidget_btn = document.getElementById('new_widget_btn')
 const addClock_btn = document.getElementById('add_clock_btn')
+const createClock_btn = document.getElementById('create_clock_btn')
 const settings_btn = document.getElementById('settings_btn')
 const createWidget_btn = document.getElementById('create_widget_btn')
 const closeSidebarIcon = document.getElementById('close_sidebar')
@@ -32,6 +33,16 @@ const handleSettingsColors = document.querySelectorAll('.settings_color')
 const handleSettingsImage = document.getElementById('settings_image')
 const handleTextColors = document.querySelectorAll('.text_color')
 const handleBorders = document.querySelectorAll('.border_color')
+
+const typeSelected = document.querySelector('.type_selected')
+const borderSelected = document.querySelector('.border_selected')
+const backgroundColorSelected = document.querySelector('.settigs_color_selected')
+const textColorSelected = document.querySelector('.settigs_text_color_selected')
+
+if (!localStorage.text_color) localStorage.setItem('text_color', textColorSelected.dataset.text_color)
+if (!localStorage.settings_type) localStorage.setItem('settings_type', typeSelected.dataset.type)
+if (!localStorage.border) localStorage.setItem('border', borderSelected.dataset.border)
+if (!localStorage.backgroundColor) localStorage.setItem('backgroundColor', backgroundColorSelected.dataset.color)
 
 
 const root = document.querySelector(':root')
@@ -98,6 +109,13 @@ function refreshSizesDefault() {
             widgetSizes.dataset.size = 'large'   
         }
     })
+
+    const clock_widget = document.querySelector('.clock_widget')
+
+    if(clock_widget) {
+        clock_widget.style.minWidth = `${largeSize.width}px`
+        clock_widget.style.minHeight = `${mediumSize.height}px`
+    }
     
 }
 
@@ -210,6 +228,16 @@ window.addEventListener('DOMContentLoaded', () => {
     if (localStorage.backgroundColor) {
         bgImage.style.backgroundColor = localStorage.getItem('backgroundColor')
         bgImage.style.backgroundImage = localStorage.getItem('backgroundImage')
+    }
+
+    if(localStorage.hasClock && localStorage.hasClock === 'true') {
+        createClock()
+        dropzones.forEach(zoneId => {
+            if (zoneId.dataset.id == localStorage.clock_id) {
+                const clock = document.querySelector('.clock_widget')
+                zoneId.appendChild(clock)
+            }
+        })
     }
     
     if(localStorage.hasOwnProperty('widgets')) {
@@ -348,9 +376,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
                 }
             })
-        }  else {
-            return
+        } else {
+
         }
+        
     }
 })
 
@@ -488,6 +517,121 @@ handleSettingsImage.addEventListener('change', function (e) {
         })
     }
     reader.readAsDataURL(file)
+})
+
+function createClock() {
+    const clock_widget = document.createElement('div')
+    const clockDate_container = document.createElement('div')
+    const clockTime_container = document.createElement('div')
+    const clock_align = document.createElement('div')
+    const weekdays = document.createElement('span')
+    const months = document.createElement('span')
+    const days = document.createElement('span')
+    const colon = document.createElement('span')
+    const hours = document.createElement('span')
+    const minutes = document.createElement('span')
+
+    clockDate_container.appendChild(weekdays)
+    clockDate_container.appendChild(months)
+    clockDate_container.appendChild(days)
+    clockTime_container.appendChild(hours)
+    clockTime_container.appendChild(colon)
+    clockTime_container.appendChild(minutes)
+    clock_align.appendChild(clockDate_container)
+    clock_align.appendChild(clockTime_container)
+    clock_widget.appendChild(clock_align)
+
+    clock_widget.draggable = true
+
+    clock_widget.addEventListener('dragstart', () => {
+        dragStart(clock_widget)
+    } )
+    clock_widget.addEventListener('dragend', () => {
+        dragEnd(clock_widget)
+    })
+    clock_widget.addEventListener('drag', () => {
+        dragWidget(clock_widget)
+    })
+
+    clock_widget.classList.add('clock_widget')
+    clock_widget.classList.add('widget')
+    clock_align.classList.add('clock_align')
+    clockDate_container.classList.add('clock_date_container')
+    clockTime_container.classList.add('clock_time_container')
+
+    clock_widget.dataset.is_clock = 'true'
+
+    clock_widget.style.minWidth = `${largeSize.width}px`
+    clock_widget.style.minHeight = `${mediumSize.height}px`
+
+    const typeSelected = document.querySelector('.type_selected')
+    const textColorSelected = document.querySelector('div.settigs_text_color_selected')
+
+    // clock_widget.style.color = textColorSelected.dataset.text_color
+    
+    if(typeSelected.dataset.type == 'square') {
+        clock_widget.style.borderRadius = 'var(--none-border-radius)'
+    } if(typeSelected.dataset.type == 'small') {
+        clock_widget.style.borderRadius = 'var(--medium-border-radius)'
+    } if(typeSelected.dataset.type == 'medium') {
+        clock_widget.style.borderRadius = 'var(--large-border-radius)'
+    }
+
+    const clock = setInterval(function time() {
+        let dateToday = new Date()
+        let weekday = dateToday.getDay()
+        let month = dateToday.getMonth()
+        let day = dateToday.getDate()
+        let hour = dateToday.getHours()
+        let minute = dateToday.getMinutes()
+
+        if (hour < 10) hour = '0' + hour
+        if (minute < 10) minute = '0' + minute
+        
+        if (weekday == 0) weekday = 'Sunday,'
+        if (weekday == 1) weekday = 'Monday,'
+        if (weekday == 2) weekday = 'Tuesday,'
+        if (weekday == 3) weekday = 'Wednesday,'
+        if (weekday == 4) weekday = 'Thursday,'
+        if (weekday == 5) weekday = 'Friday,'
+        if (weekday == 6) weekday = 'Saturday,'
+
+        if (month == 0) month = 'January'
+        if (month == 1) month = 'February'
+        if (month == 2) month = 'March'
+        if (month == 3) month = 'April'
+        if (month == 4) month = 'May'
+        if (month == 5) month = 'June'
+        if (month == 6) month = 'July '
+        if (month == 7) month = 'August'
+        if (month == 8) month = 'September'
+        if (month == 9) month = 'October'
+        if (month == 10) month = 'November'
+        if (month == 11) month = 'December'
+
+
+        weekdays.textContent = weekday
+        months.textContent = month
+        days.textContent = day
+        hours.textContent = hour
+        colon.textContent = ':'
+        minutes.textContent = minute
+
+    })
+
+    createZone.appendChild(clock_widget)
+}
+
+createClock_btn.addEventListener('click', () => {
+    const hasClock = document.querySelector('.clock_widget')
+    if(!hasClock) {
+        createClock()
+        localStorage.setItem('hasClock', true)
+        localStorage.setItem('clock_id', 0)
+        toast('Clock created successfully!', 'green')
+    } else {
+        toast('There is already a clock created!', 'red')
+    }
 })
 
 
@@ -764,18 +908,26 @@ function editWidget(widget){
 }
 
 function refreshID(){
+    const clock = document.querySelector('.clock_widget')
+    const widgetDragged = document.querySelector('div.dragging')
+
+
+    if (widgetDragged.dataset.is_clock && widgetDragged.dataset.is_clock == 'true'){
+        localStorage.setItem('clock_id', widgetDragged.dataset.id)
+    }
+
     if(localStorage.hasOwnProperty('widgets')){
         widgets = JSON.parse(localStorage.getItem('widgets'))
-    }
+
+        for(i = 0; i < widgets.length; i++) {
+            if(widgets[i].widget_link == widgetDragged.dataset.link){
+                widgets[i].widget_id = widgetDragged.dataset.id
+                localStorage.setItem('widgets', JSON.stringify(widgets)) 
+            }
+        } 
+    } 
     
-    const widgetDragged = document.querySelector('div.dragging')
     
-    for(i = 0; i < widgets.length; i++) {
-        if(widgets[i].widget_link == widgetDragged.dataset.link){
-            widgets[i].widget_id = widgetDragged.dataset.id
-            localStorage.setItem('widgets', JSON.stringify(widgets)) 
-        }
-    }
 }
 
 handleImage.addEventListener('change', function (e) {
@@ -1074,6 +1226,12 @@ deleteZone.addEventListener('drop', () => {
             localStorage.setItem('widgets', JSON.stringify(widgets)) 
         }
     }
+
+    if (widgetDragged.dataset.is_clock && widgetDragged.dataset.is_clock === 'true') {
+        console.log('Relogio removido');  
+    }
+
+    
     lastPosition.removeChild(widgetDragged)
     deleteZone.classList.remove('delete_over')
     toast('Widget deleted successfully!', 'green')    

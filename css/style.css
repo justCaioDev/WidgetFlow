@@ -421,15 +421,13 @@ main .modal_openned .new_widget {
 main .add_clock_modal {
     display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: center;
     justify-content: space-between;
     gap: 12px;
     position: fixed;
     left: 272px;
     top: 150px;
     scale: 0;
-    max-width: 324px;
-    width: 100%;
     overflow: hidden;
     transition: .3s ease-in-out;
     opacity: 0;
@@ -444,6 +442,7 @@ main .add_clock_modal {
     justify-content: center;
     gap: 8px;
     width: 100%;
+    max-width: 200px;
     padding: 14px;
     border: none;
     border-radius: 4px;
@@ -459,14 +458,18 @@ main .add_clock_modal {
 }
 
 .add_clock_modal .clocks_options {
-    margin-bottom: 12px;
-    width: 100%;
+    margin-bottom: 8;
 }
 
 .add_clock_modal .clock_option {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     padding: 6px 12px;
     background-color: var(--sidebar-bg);
+}
+
+.clock_option img {
+    width: 200px;
+    margin: auto;
 }
 
 main .settings_modal {
@@ -1017,6 +1020,63 @@ main .about_modal {
     text-align: center;
     height: 100%;
     background-color: #9634e9;
+}
+
+.clock_widget {
+    font-family: 'Inter';
+    letter-spacing: 2px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    z-index: 98;
+    transition: .3s;
+}
+
+.clock_widget:hover {
+    scale: 105%;
+    background-color: var(--transparent-active-state-btn);
+    z-index: 99;
+}
+
+.clock_widget .clock_align {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.clock_widget .clock_date_container {
+    font-weight: 500;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: .75rem;
+}
+
+.clock_widget .clock_time_container {
+    font-weight: 600;
+    font-size: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+main .right .clock_widget {
+    left: auto;
+    right: 0;
+}
+
+main .bottom .clock_widget {
+    top: auto;
+    bottom: 0;
 }
 
 @media screen and (max-width: 1080px) {
