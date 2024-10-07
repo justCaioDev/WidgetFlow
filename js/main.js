@@ -8,6 +8,8 @@ const createWidget_btn = document.getElementById('create_widget_btn')
 const closeSidebarIcon = document.getElementById('close_sidebar')
 const closeEditWidget_modal = document.getElementById('close_edit_widget_modal')
 const saveSettings_btn = document.getElementById('save_settings_btn')
+const about_modal = document.getElementById('about_modal')
+const closeAbout_btn = document.getElementById('close_about_modal')
 
 const newWidget_modal = document.getElementById('new_widget_modal')
 const addClock_modal = document.getElementById('add_clock_modal')
@@ -35,7 +37,12 @@ const handleBorders = document.querySelectorAll('.border_color')
 const root = document.querySelector(':root')
 const rootStyles = getComputedStyle(root)
 
-let isFirstTime = false
+let isFirstTime
+
+if(!localStorage.isFirstTime) {
+    isFirstTime = true
+    localStorage.setItem('isFirstTime', isFirstTime)
+}
 
 let smallSize = {
     width: dropzoneSize.clientWidth,
@@ -92,6 +99,22 @@ function refreshSizesDefault() {
         }
     })
     
+}
+
+
+if (isFirstTime == true) {
+    about_modal.style.opacity = 1
+    about_modal.style.display = 'block'
+    closeAbout_btn.addEventListener('click', () => {
+        isFirstTime = false
+        localStorage.setItem('isFirstTime', isFirstTime)
+        
+        about_modal.style.opacity = '0'
+        
+        setTimeout(() => {
+            about_modal.style.display = 'none'
+        }, 700)
+    })
 }
 
 refreshSizesDefault()
