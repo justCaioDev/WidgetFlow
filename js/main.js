@@ -188,11 +188,7 @@ function dropWidget() {
         const lastPosition = document.querySelector('div.last_position')
         lastPosition.appendChild(hasWidget)
         hasWidget.dataset.id = lastPosition.dataset.id
-        console.log('saiu do lugar' + hasWidget.dataset.id);
-        
         widgetDragged.dataset.id = newPosition.dataset.id
-        console.log('entrou no lugar' + widgetDragged.dataset.id);
-        
         if(localStorage.hasOwnProperty('widgets')) {
             widgets = JSON.parse(localStorage.getItem('widgets'))
 
@@ -567,7 +563,7 @@ function createClock() {
     const typeSelected = document.querySelector('.type_selected')
     const textColorSelected = document.querySelector('div.settigs_text_color_selected')
 
-    // clock_widget.style.color = textColorSelected.dataset.text_color
+    clock_widget.style.color = textColorSelected.dataset.text_color
     
     if(typeSelected.dataset.type == 'square') {
         clock_widget.style.borderRadius = 'var(--none-border-radius)'
@@ -663,7 +659,6 @@ function createWidget() {
         newWidget_a.setAttribute('target', '_blank')
         newWidget.style.backgroundColor = colorSelected.dataset.color
         newWidget.style.boxShadow = `3px 4px 0 ${localStorage.border}`
-        console.log(textColorSelected);
         newWidget.dataset.widget_text_color = textColorSelected.dataset.text_color
         
         newWidget.dataset.color = colorSelected.dataset.color
@@ -790,8 +785,6 @@ function editWidget(widget){
     handleEditColors.forEach(isColor => {
         isColor.classList.remove('color_selected')
         if(editingWidget && isColor.dataset.color == editingWidget.dataset.color) {
-            console.log('alouu');
-            
             isColor.classList.add('color_selected')
         }   
     })
@@ -1228,7 +1221,7 @@ deleteZone.addEventListener('drop', () => {
     }
 
     if (widgetDragged.dataset.is_clock && widgetDragged.dataset.is_clock === 'true') {
-        console.log('Relogio removido');  
+        localStorage.setItem('hasClock', false)
     }
 
     
