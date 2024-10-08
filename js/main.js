@@ -1210,15 +1210,18 @@ deleteZone.addEventListener('drop', () => {
 
     if(localStorage.hasOwnProperty('widgets')){
         widgets = JSON.parse(localStorage.getItem('widgets'))
+        
+        for(i = 0; i < widgets.length; i++) {
+            if(widgets[i].widget_id == widgetDragged.dataset.id){
+                widgets.splice(i, 1)
+    
+                localStorage.setItem('widgets', JSON.stringify(widgets)) 
+            }
+        }
+        
     }
     
-    for(i = 0; i < widgets.length; i++) {
-        if(widgets[i].widget_id == widgetDragged.dataset.id){
-            widgets.splice(i, 1)
-
-            localStorage.setItem('widgets', JSON.stringify(widgets)) 
-        }
-    }
+    
 
     if (widgetDragged.dataset.is_clock && widgetDragged.dataset.is_clock === 'true') {
         localStorage.setItem('hasClock', false)
