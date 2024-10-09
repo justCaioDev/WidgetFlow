@@ -3,21 +3,21 @@
 WidgetFlow is your ultimate platform for creating and organizing custom widgets on your home screen.
 Whether you need to streamline your daily tasks, track important information, or personalize your space,
 WidgetFlow offers a seamless drag-and-drop interface to build your perfect dashboard. With endless customization options,
-WidgetHub puts the control in your hands, making your home screen the first thing you'll want to open every day.
+WidgetFlow puts the control in your hands, making your home screen the first thing you'll want to open every day.
 
 ## Examples of how it can be used
 
 ### Example 01
-![](./example_01.png)
+![](./images/Template%20example%202.png)
 
 ### Example 02
-![](./example_02.png)
+![](./images/Template%20example%205.png)
 
 ### Example 03
-![](./example_03.png)
+![](./images/Template%20example%203.png)
 
 ### Example 04
-![](./example_04.png)
+![](./images/Template%20example%201.png)
 
 ## Build with
 
